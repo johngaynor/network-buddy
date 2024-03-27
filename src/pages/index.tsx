@@ -1,11 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
+import { type NextPage } from "next";
 
 import { api } from "~/utils/api";
 
-export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+const Home: NextPage = () => {
+  const data = api.contacts.getAll.useQuery();
+
+  console.log("data", data.data);
 
   return (
     <>
@@ -19,4 +22,6 @@ export default function Home() {
       </main>
     </>
   );
-}
+};
+
+export default Home;

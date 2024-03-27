@@ -2,19 +2,64 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
-    @@index([name])
+model Contact {
+  id           Int            @id @default(autoincrement())
+  userId       String
+  name         String
+  Affiliation  Affiliation[]
+  Occupation   Occupation[]
+  Notes        Notes[]
+  Interactions Interactions[]
+}
+
+model Affiliation {
+  id          Int      @id @default(autoincrement())
+  contact     Contact  @relation(fields: [contactId], references: [id])
+  contactId   Int
+  affiliation String
+  updatedAt   DateTime @default(now())
+}
+
+model Occupation {
+  id        Int      @id @default(autoincrement())
+  contact   Contact  @relation(fields: [contactId], references: [id])
+  contactId Int
+  company   String
+  position  String
+  updatedAt DateTime @default(now())
+}
+
+model Notes {
+  id        Int      @id @default(autoincrement())
+  contact   Contact  @relation(fields: [contactId], references: [id])
+  contactId Int
+  notes     String
+  updatedAt DateTime @default(now())
+}
+
+model Interactions {
+  id         Int          @id @default(autoincrement())
+  contact    Contact      @relation(fields: [contactId], references: [id])
+  contactId  Int
+  title      String
+  location   String
+  date       DateTime
+  Highlights Highlights[]
+}
+
+model Highlights {
+  id            Int          @id @default(autoincrement())
+  interaction   Interactions @relation(fields: [interactionId], references: [id])
+  interactionId Int
+  highlight     String
 }
