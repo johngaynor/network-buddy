@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { authMiddleware } from "@clerk/nextjs";
+import { redirectToSignIn } from "@clerk/nextjs/server";
 
 export default authMiddleware({
   // publicRoutes: (req) => !req.url.includes("/dashboard"),
