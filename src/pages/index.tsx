@@ -6,7 +6,7 @@ import { type NextPage } from "next";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const data = api.contacts.getAll.useQuery();
+  // const data = api.contacts.getAll.useQuery();
 
   return (
     <>
