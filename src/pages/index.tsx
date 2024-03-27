@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 
 import { api } from "~/utils/api";
 
-const Home: NextPage = () => {
+export default function Home() {
   // const data = api.contacts.getAll.useQuery();
 
   return (
@@ -20,6 +20,4 @@ const Home: NextPage = () => {
       </main>
     </>
   );
-};
-
-export default Home;
+}
