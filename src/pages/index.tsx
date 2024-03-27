@@ -8,8 +8,6 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
   const data = api.contacts.getAll.useQuery();
 
-  console.log("data", data.data);
-
   return (
     <>
       <Head>
