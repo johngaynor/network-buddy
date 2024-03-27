@@ -1,29 +1,46 @@
-# Create T3 App
+<h1 align="center">Welcome to Network Buddy 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
+   <img alt="Last Updated" src="https://img.shields.io/badge/last%20updated-March%202024-red" />
+   <img alt="Contributors" src="https://img.shields.io/badge/contributors-1-bright%20green">
+   <img alt="Status" src="https://img.shields.io/badge/status-WIP-red">
+</p>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+> Network Buddy is a personalized CRM system to help young adults create and maintain relationships in both their professional and personal lives.
 
-## What's next? How do I make an app with this?
+<p>
+<img alt="Homepage Image" src="src/assets/images/readme-img.png">
+</p>
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### 🏠 [Homepage](https://calorietracker.johngaynor.dev)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Description
+
+This application is a contact system that stores relevant information about individuals and organizations. Furthermore, users can create “interaction notes” to detail events or conversations (i.e. at a conference, coffee shop, at the gym, etc.).
+
+## Tech Stack
+
+This project was built using the [T3 Stack](https://create.t3.gg/) bootstrapped with `create-t3-app`.
 
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+## Version History
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### v1
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Still creating first MVP!
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Author
 
-## How do I deploy this?
+👤 **John Gaynor**
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- Portfolio: https://johngaynor.dev
+- Github: [@johngaynor](https://github.com/johngaynor)
+- LinkedIn: [@john-gaynor1](https://linkedin.com/in/john-gaynor1)
+
+---
+
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
