@@ -3,7 +3,7 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
   // publicRoutes: (req) => !req.url.includes("/dashboard"),
-  afterAuth(auth, req): NextResponse | Promise<NextResponse> {
+  afterAuth(auth, req): NextResponse | Promise<void> {
     // optional 3rd arg called evt
     // console.log("middleware running");
     console.log(auth?.userId);
