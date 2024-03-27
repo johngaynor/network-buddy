@@ -9,9 +9,7 @@ export default authMiddleware({
     console.log(auth?.userId);
     // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url } as {
-        returnBackUrl: string;
-      });
+      return redirectToSignIn({ returnBackUrl: req.url });
     }
     // Redirect signed in users to organization selection page if they are not active in an organization
     // if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/") {
@@ -23,7 +21,7 @@ export default authMiddleware({
       return NextResponse.next();
     }
     // Allow users visiting public routes to access them
-    // return NextResponse.next();
+    return NextResponse.next();
   },
 });
 
