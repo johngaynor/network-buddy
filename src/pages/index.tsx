@@ -1,12 +1,12 @@
 import Head from "next/head";
-import Link from "next/link";
+// import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
 
 import { api } from "~/utils/api";
 
-export default function Home() {
-  // const data = api.contacts.getAll.useQuery();
+const Home: NextPage = () => {
+  const data = api.contacts.getAll.useQuery();
 
   return (
     <>
@@ -20,4 +20,6 @@ export default function Home() {
       </main>
     </>
   );
-}
+};
+
+export default Home;
