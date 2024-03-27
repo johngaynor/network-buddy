@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
+  // publicRoutes: (req) => !req.url.includes("/dashboard"),
   afterAuth(auth, req, evt) {
     console.log("middleware running");
     // Handle users who aren't authenticated
@@ -21,3 +22,7 @@ export default authMiddleware({
     return NextResponse.next();
   },
 });
+
+export const config = {
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};
