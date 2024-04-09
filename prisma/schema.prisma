@@ -1,5 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
 
 datasource db {
   provider     = "mysql"
@@ -7,59 +9,46 @@ datasource db {
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
-}
-
 model Contact {
   id           Int            @id @default(autoincrement())
   userId       String
   name         String
-  Affiliation  Affiliation[]
+  affiliation  String @default("hello")
   Occupation   Occupation[]
   Notes        Notes[]
   Interactions Interactions[]
 }
 
-model Affiliation {
-  id          Int      @id @default(autoincrement())
-  contact     Contact  @relation(fields: [contactId], references: [id])
-  contactId   Int
-  affiliation String
-  updatedAt   DateTime @default(now())
-}
-
 model Occupation {
   id        Int      @id @default(autoincrement())
-  contact   Contact  @relation(fields: [contactId], references: [id])
   contactId Int
   company   String
   position  String
   updatedAt DateTime @default(now())
+  contact   Contact  @relation(fields: [contactId], references: [id])
 }
 
 model Notes {
   id        Int      @id @default(autoincrement())
-  contact   Contact  @relation(fields: [contactId], references: [id])
   contactId Int
   notes     String
   updatedAt DateTime @default(now())
+  contact   Contact  @relation(fields: [contactId], references: [id])
 }
 
 model Interactions {
   id         Int          @id @default(autoincrement())
-  contact    Contact      @relation(fields: [contactId], references: [id])
   contactId  Int
   title      String
   location   String
   date       DateTime
+  contact    Contact      @relation(fields: [contactId], references: [id])
   Highlights Highlights[]
 }
 
 model Highlights {
   id            Int          @id @default(autoincrement())
-  interaction   Interactions @relation(fields: [interactionId], references: [id])
   interactionId Int
   highlight     String
+  interaction   Interactions @relation(fields: [interactionId], references: [id])
 }
