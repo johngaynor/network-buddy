@@ -13,27 +13,11 @@ model Contact {
   id           Int            @id @default(autoincrement())
   userId       String
   name         String
-  affiliation  String @default("hello")
-  Occupation   Occupation[]
-  Notes        Notes[]
+  affiliation  String
+  notes        String
+  company      String
+  position     String
   Interactions Interactions[]
-}
-
-model Occupation {
-  id        Int      @id @default(autoincrement())
-  contactId Int
-  company   String
-  position  String
-  updatedAt DateTime @default(now())
-  contact   Contact  @relation(fields: [contactId], references: [id])
-}
-
-model Notes {
-  id        Int      @id @default(autoincrement())
-  contactId Int
-  notes     String
-  updatedAt DateTime @default(now())
-  contact   Contact  @relation(fields: [contactId], references: [id])
 }
 
 model Interactions {
