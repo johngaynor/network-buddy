@@ -57,6 +57,28 @@ export const contactsRouter = createTRPCRouter({
       },
     });
   }),
+  newContact: publicProcedure.query(({ ctx }) => {
+    return ctx.db.contact.create({
+      data: {
+        userId: "...",
+        name: "TEST CREATE",
+      },
+    });
+  }),
+  // updateAffiliation: publicProcedure.query(({ ctx }) => {
+  //   return ctx.db.contact.update({
+  //     where: {
+  //       userId: 'hello',
+  //     },
+  //     data: {
+  //       Affiliation: {
+  //         create: {
+  //           data: {},
+  //         },
+  //       },
+  //     },
+  //   });
+  // }),
 });
 
 // if there are no results, it will return an empty array
