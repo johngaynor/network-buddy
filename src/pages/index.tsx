@@ -1,6 +1,6 @@
 import Head from "next/head";
 // import Link from "next/link";
-import { SignOutButton } from "@clerk/nextjs";
+// import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import {
   createColumnHelper,
@@ -12,40 +12,56 @@ import { DateTime } from "luxon";
 
 import { api } from "~/utils/api";
 
-type Occupation = {
-  company: string;
-  position: string;
-  updatedAt: Date;
+type Highlight = {
+  highlight: string;
+};
+
+type Interaction = {
+  title: string;
+  location: string;
+  date: Date;
+  highlights: Highlight[];
 };
 
 type Contact = {
   name: string;
   affiliation: string;
-  occupation: Occupation[];
-  last_interaction: Date;
-  interaction_title: string;
-  opportunities: string | null;
+  notes: string;
+  position: string;
+  company: string;
+  interactions: Interaction[];
 };
 
 const defaultData: Contact[] = [
   {
     name: "Zach Canterbury",
-    affiliation: "Mutual classes @ IUPUI",
-    occupation: [
+    affiliation: "IMI",
+    notes: "Ball State grad, interned with E&B in 2012",
+    position: "Director of IN/OH Sales",
+    company: "IMI",
+    interactions: [
       {
-        company: "IUPUI",
-        position: "student",
-        updatedAt: new Date(2025, 7, 22),
+        title: "Coffee at Patachou",
+        location: "Patachou Coffee at Stutz",
+        date: new Date(),
+        highlights: [
+          { highlight: "Early years in career are going to be a grind" },
+          { highlight: "Still making cold calls in his new role" },
+        ],
       },
       {
-        company: "SECOND",
-        position: "TEST",
-        updatedAt: new Date(2024, 7, 22),
+        title: "Intern Presentation",
+        location: "IMI Corporate Office",
+        date: new Date("2024-03-03"),
+        highlights: [
+          { highlight: "Gave feedback on customer scorecard project" },
+          {
+            highlight:
+              "Interested in hiring me on if I wanted to switch to sales",
+          },
+        ],
       },
     ],
-    last_interaction: new Date(2023, 7, 22),
-    interaction_title: "Coffee at Patachou",
-    opportunities: null,
   },
 ];
 
@@ -60,39 +76,18 @@ const columns = [
   }),
   columnHelper.accessor("affiliation", {
     header: () => "Affiliation",
-    cell: (i) => i.renderValue(),
+    cell: (info) => info.renderValue(),
   }),
-  columnHelper.accessor("occupation", {
-    header: () => "Occupation",
-    cell: (info) => {
-      const occupations = info.getValue() as Occupation[];
-      if (occupations.length === 0) {
-        return ""; // Handle case when there are no occupations
-      }
-
-      const sorted = occupations.sort(
-        (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime(),
-      );
-      // Get the most recent occupation (the first one after sorting)
-      const recent = sorted[0];
-      // Return the company and position of the most recent occupation
-      return `${recent?.company}, ${recent?.position}`;
-    },
+  columnHelper.accessor("position", {
+    header: () => "Position",
+    cell: (info) => info.renderValue(),
   }),
-  columnHelper.accessor("last_interaction", {
-    header: () => "Last Interaction",
-    cell: (i) => {
-      const val = i.getValue() as Date;
-      const valObj = DateTime.fromJSDate(val).toFormat("MM/dd/yyyy");
-      return valObj;
-    },
-    size: 70,
+  columnHelper.accessor("company", {
+    header: () => "Company",
+    cell: (info) => info.renderValue(),
   }),
-  columnHelper.accessor("interaction_title", {
-    header: "Event",
-  }),
-  columnHelper.accessor("opportunities", {
-    header: "Opportunities",
+  columnHelper.accessor("notes", {
+    header: "Notes",
     cell: (info) => {
       const val = info.getValue() as string;
       const maxLength = 35;
@@ -101,6 +96,39 @@ const columns = [
           ? val.substring(0, maxLength) + "..."
           : val;
       return truncatedVal;
+    },
+  }),
+  columnHelper.accessor("interactions", {
+    header: () => "Recent Activity",
+    cell: (info) => {
+      const interactions = info.getValue() as Interaction[];
+      if (interactions.length === 0) {
+        return ""; // Handle case when there are no interactions
+      }
+
+      const sorted = interactions.sort(
+        (a, b) => b.date.getTime() - a.date.getTime(),
+      );
+      const recent = sorted[0];
+      return recent?.title;
+    },
+  }),
+  columnHelper.accessor("interactions", {
+    header: () => "Activity Date",
+    cell: (info) => {
+      const interactions = info.getValue() as Interaction[];
+      if (interactions.length === 0) {
+        return ""; // Handle case when there are no interactions
+      }
+
+      const sorted = interactions.sort(
+        (a, b) => b.date.getTime() - a.date.getTime(),
+      );
+      const recent = sorted[0];
+      const convertedDate = DateTime.fromJSDate(
+        recent?.date || new Date(),
+      ).toFormat("MMMM dd, yyyy");
+      return `${convertedDate}`;
     },
   }),
 ];
