@@ -8,7 +8,12 @@ export const contactsRouter = createTRPCRouter({
       // where: {
       //   userId: '32352342'
       // },
-      include: {
+      select: {
+        name: true,
+        affiliation: true,
+        notes: true,
+        position: true,
+        company: true,
         Interactions: {
           select: {
             title: true,
@@ -16,7 +21,6 @@ export const contactsRouter = createTRPCRouter({
             date: true,
             Highlights: {
               select: {
-                id: true,
                 highlight: true,
               },
             },

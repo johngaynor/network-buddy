@@ -20,7 +20,7 @@ type Interaction = {
   title: string;
   location: string;
   date: Date;
-  highlights: Highlight[];
+  Highlights: Highlight[];
 };
 
 type Contact = {
@@ -29,41 +29,8 @@ type Contact = {
   notes: string;
   position: string;
   company: string;
-  interactions: Interaction[];
+  Interactions: Interaction[];
 };
-
-const defaultData: Contact[] = [
-  {
-    name: "Zach Canterbury",
-    affiliation: "IMI",
-    notes: "Ball State grad, interned with E&B in 2012",
-    position: "Director of IN/OH Sales",
-    company: "IMI",
-    interactions: [
-      {
-        title: "Coffee at Patachou",
-        location: "Patachou Coffee at Stutz",
-        date: new Date(),
-        highlights: [
-          { highlight: "Early years in career are going to be a grind" },
-          { highlight: "Still making cold calls in his new role" },
-        ],
-      },
-      {
-        title: "Intern Presentation",
-        location: "IMI Corporate Office",
-        date: new Date("2024-03-03"),
-        highlights: [
-          { highlight: "Gave feedback on customer scorecard project" },
-          {
-            highlight:
-              "Interested in hiring me on if I wanted to switch to sales",
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const columnHelper = createColumnHelper<Contact>();
 
@@ -98,7 +65,7 @@ const columns = [
       return truncatedVal;
     },
   }),
-  columnHelper.accessor("interactions", {
+  columnHelper.accessor("Interactions", {
     header: () => "Recent Activity",
     cell: (info) => {
       const interactions = info.getValue() as Interaction[];
@@ -113,7 +80,7 @@ const columns = [
       return recent?.title;
     },
   }),
-  columnHelper.accessor("interactions", {
+  columnHelper.accessor("Interactions", {
     header: () => "Activity Date",
     cell: (info) => {
       const interactions = info.getValue() as Interaction[];
@@ -134,14 +101,17 @@ const columns = [
 ];
 
 const Home: NextPage = () => {
-  const { data } = api.contacts.getAll.useQuery();
-  console.log(data);
-
+  const { data, isLoading } = api.contacts.getAll.useQuery();
+  // console.log(data, defaultData);
   const table = useReactTable({
-    data: defaultData,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isLoading) return "Loading...";
+
+  if (!data || !table) return "No data available";
 
   return (
     <>
@@ -154,10 +124,13 @@ const Home: NextPage = () => {
         {/* <SignOutButton /> */}
         <table className="w-11/12 bg-white">
           <thead className="">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="border-2 bg-red-300 text-left">
+            {table.getHeaderGroups().map((headerGroup, i) => (
+              <tr key={headerGroup.id + i}>
+                {headerGroup.headers.map((header, i) => (
+                  <th
+                    key={header.id + i}
+                    className="border-2 bg-red-300 text-left"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -170,10 +143,13 @@ const Home: NextPage = () => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} style={{ width: cell.column.getSize() }}>
+            {table.getRowModel().rows.map((row, i) => (
+              <tr key={row.id + i}>
+                {row.getVisibleCells().map((cell, i) => (
+                  <td
+                    key={cell.id + i}
+                    style={{ width: cell.column.getSize() }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
