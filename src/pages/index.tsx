@@ -83,7 +83,7 @@ const columns = [
   columnHelper.accessor("Interactions", {
     header: () => "Activity Date",
     cell: (info) => {
-      const interactions = info.getValue() as Interaction[];
+      const interactions = info.getValue();
       if (interactions.length === 0) {
         return ""; // Handle case when there are no interactions
       }
