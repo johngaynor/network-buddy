@@ -56,7 +56,7 @@ const columns = [
   columnHelper.accessor("notes", {
     header: "Notes",
     cell: (info) => {
-      const val = info.getValue() as string;
+      const val = info.getValue();
       const maxLength = 35;
       const truncatedVal =
         val && val.length > maxLength
@@ -68,7 +68,7 @@ const columns = [
   columnHelper.accessor("Interactions", {
     header: () => "Recent Activity",
     cell: (info) => {
-      const interactions = info.getValue() as Interaction[];
+      const interactions = info.getValue();
       if (interactions.length === 0) {
         return ""; // Handle case when there are no interactions
       }
@@ -93,7 +93,7 @@ const columns = [
       );
       const recent = sorted[0];
       const convertedDate = DateTime.fromJSDate(
-        recent?.date || new Date(),
+        recent?.date ?? new Date(),
       ).toFormat("MMMM dd, yyyy");
       return `${convertedDate}`;
     },
