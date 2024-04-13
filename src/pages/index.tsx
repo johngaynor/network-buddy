@@ -51,8 +51,7 @@ const columns = [
     header: () => "NAME",
     id: "name",
     cell: (info) => info.getValue(),
-    size: 120,
-    maxSize: 150,
+    size: 150,
   }),
   columnHelper.accessor("affiliation", {
     header: () => "AFFILIATION",
@@ -92,6 +91,7 @@ const columns = [
       const recent = sorted[0];
       return recent?.title;
     },
+    size: 90,
   }),
   columnHelper.accessor("Interactions", {
     header: () => "ACTIVITY DATE",
@@ -111,12 +111,13 @@ const columns = [
       ).toFormat("MMMM dd, yyyy");
       return `${convertedDate}`;
     },
+    size: 90,
   }),
 ];
 
 const Home: NextPage = () => {
   const { user } = useUser();
-  console.log(user?.id);
+  // console.log(user?.id);
   const { data, isLoading } = api.contacts.getAll.useQuery();
 
   // console.log(data, defaultData);
@@ -139,7 +140,7 @@ const Home: NextPage = () => {
     },
   });
 
-  console.log(table);
+  // console.log(table);
 
   if (isLoading) return "Loading...";
 
@@ -241,7 +242,8 @@ const Home: NextPage = () => {
                       {headerGroup.headers.map((header, i) => (
                         <th
                           key={header.id + i}
-                          className="text-left text-sm text-[#b5bfc3]"
+                          // className="text-left text-sm text-[#b5bfc3]"
+                          className={`px-3 text-left text-sm text-[#b5bfc3] ${i === 0 ? "pl-10" : null}`}
                         >
                           {header.isPlaceholder
                             ? null
@@ -258,13 +260,14 @@ const Home: NextPage = () => {
                   {table.getRowModel().rows.map((row, i) => (
                     <tr
                       key={row.id + i}
-                      className="h-12 border-y-8 border-gray-100 bg-white text-[#999]"
+                      className="h-12 rounded-xl border-y-8 border-gray-100 bg-white text-[#999]"
                     >
                       {row.getVisibleCells().map((cell, i) => (
                         <td
                           key={cell.id + i}
                           style={{ width: cell.column.getSize() }}
-                          className=""
+                          // className="rounded-xl p-3"
+                          className={`p-3 ${i === 0 ? "pl-10" : null}`}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,

@@ -7,7 +7,7 @@ export default authMiddleware({
   afterAuth(auth, req): NextResponse | Promise<void> {
     // optional 3rd arg called evt
     // console.log("middleware running");
-    console.log(auth?.userId);
+    // console.log(auth?.userId);
     // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url }) as NextResponse;
