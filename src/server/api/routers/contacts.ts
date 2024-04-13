@@ -1,19 +1,18 @@
 // import { z } from "zod";
 
-import { create } from "domain";
 import {
   createTRPCRouter,
   privateProcedure,
-  publicProcedure,
+  // publicProcedure,
 } from "~/server/api/trpc";
 
 export const contactsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    // console.log("ctx", ctx); // there is a ctx.input property
+  getAll: privateProcedure.query(({ ctx }) => {
+    const userId = ctx.userId;
     return ctx.db.contact.findMany({
-      // where: {
-      //   userId: '32352342'
-      // },
+      where: {
+        userId: userId,
+      },
       select: {
         name: true,
         affiliation: true,
@@ -37,9 +36,6 @@ export const contactsRouter = createTRPCRouter({
         },
       },
     });
-  }),
-  privateTest: privateProcedure.mutation(async ({ ctx }) => {
-    const userId = ctx.userId;
   }),
   // newContact: publicProcedure.query(({ ctx }) => {
   //   return ctx.db.contact.create({

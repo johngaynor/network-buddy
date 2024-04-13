@@ -116,11 +116,8 @@ const columns = [
 ];
 
 const Home: NextPage = () => {
-  const { user } = useUser();
-  // console.log(user?.id);
   const { data, isLoading } = api.contacts.getAll.useQuery();
 
-  // console.log(data, defaultData);
   const table = useReactTable({
     data: data ?? [],
     columns,
@@ -139,8 +136,6 @@ const Home: NextPage = () => {
       ],
     },
   });
-
-  // console.log(table);
 
   if (isLoading) return "Loading...";
 
