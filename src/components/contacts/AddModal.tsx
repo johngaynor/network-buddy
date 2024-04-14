@@ -37,8 +37,7 @@ export const AddModal = (props: {
       void ctx.contacts.getAll.invalidate();
       props.setAddModal(false);
     },
-    onError: (err) => {
-      console.log(err);
+    onError: () => {
       toast.error("Failed to add new contact, please try again later!");
     },
   });
@@ -66,76 +65,85 @@ export const AddModal = (props: {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-        <div className="relative mx-auto my-6 w-auto max-w-3xl">
+        <div className="relative mx-auto my-6 w-1/2">
           {/*content*/}
           <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
             {/*header*/}
-            <div className="border-blueGray-200 flex items-start justify-between rounded-t border-b border-solid p-5">
-              <h3 className="text-3xl font-semibold">New Contact Form</h3>
-              <button
-                className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
-                onClick={() => props.setAddModal(false)}
-              >
-                <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none">
-                  ×
-                </span>
-              </button>
+            <div className="flex items-center justify-center rounded-t p-5">
+              <h3 className="text-3xl font-semibold">Add Contact</h3>
             </div>
             {/*body*/}
-            <div className="relative flex flex-auto flex-col p-6">
-              <input
-                className="border-2"
-                placeholder="Name..."
-                id="name"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                value={formData.name}
-              />
-              {formErrors.name ? (
-                <p className="text-red-500">{formErrors.name}</p>
-              ) : null}
-
-              <input
-                className="border-2"
-                placeholder="Affiliation..."
-                id="affiliation"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, affiliation: e.target.value })
-                }
-                value={formData.affiliation}
-              />
-              <input
-                className="border-2"
-                placeholder="Position..."
-                id="position"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, position: e.target.value })
-                }
-                value={formData.position}
-              />
-              <input
-                className="border-2"
-                placeholder="Company..."
-                id="company"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
-                }
-                value={formData.company}
-              />
-              <input
-                className="border-2"
-                placeholder="Notes..."
-                id="notes"
-                onChange={(e) =>
-                  setFormData({ ...formData, notes: e.target.value })
-                }
-                value={formData.notes}
-              />
+            <div className="relative flex flex-col p-6">
+              {/* first row of inputs */}
+              <div className="flex w-full flex-row">
+                <div className="flex w-1/2 flex-col pr-3">
+                  <label>Name</label>
+                  <input
+                    className="mt-1 rounded-lg border-2 p-3"
+                    placeholder="Joe Smith"
+                    id="name1"
+                    required
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    value={formData.name}
+                  />
+                  {formErrors.name ? (
+                    <p className="text-red-500">{formErrors.name}</p>
+                  ) : null}
+                </div>
+                <div className="flex w-1/2 flex-col pl-3">
+                  <label>Name</label>
+                  <input
+                    className="mt-1 rounded-lg border-2 p-3"
+                    placeholder="Joe Smith"
+                    id="name1"
+                    required
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    value={formData.name}
+                  />
+                  {formErrors.name ? (
+                    <p className="text-red-500">{formErrors.name}</p>
+                  ) : null}
+                </div>
+              </div>
+              {/* second row of inputs */}
+              <div className="flex w-full flex-row">
+                <div className="flex w-1/2 flex-col pr-3">
+                  <label>Name</label>
+                  <input
+                    className="mt-1 rounded-lg border-2 p-3"
+                    placeholder="Joe Smith"
+                    id="name1"
+                    required
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    value={formData.name}
+                  />
+                  {formErrors.name ? (
+                    <p className="text-red-500">{formErrors.name}</p>
+                  ) : null}
+                </div>
+                <div className="flex w-1/2 flex-col pl-3">
+                  <label>Name</label>
+                  <input
+                    className="mt-1 rounded-lg border-2 p-3"
+                    placeholder="Joe Smith"
+                    id="name1"
+                    required
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    value={formData.name}
+                  />
+                  {formErrors.name ? (
+                    <p className="text-red-500">{formErrors.name}</p>
+                  ) : null}
+                </div>
+              </div>
             </div>
             {/*footer*/}
             <div className="border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6">

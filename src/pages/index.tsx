@@ -24,7 +24,7 @@ import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 
 const Home: NextPage = () => {
-  const [addModal, setAddModal] = useState(false);
+  const [addModal, setAddModal] = useState(true);
 
   const { data, isLoading, error } = api.contacts.getAll.useQuery();
 
