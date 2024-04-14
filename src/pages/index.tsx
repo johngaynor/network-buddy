@@ -1,9 +1,11 @@
 import Head from "next/head";
+import { useState } from "react";
 import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import { IconDefinition, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { ContactLoadingPage } from "~/components/spinner";
 import ContactTable from "~/components/contacts/ContactTable";
+import { AddModal } from "~/components/contacts/AddModal";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -18,6 +20,9 @@ import {
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
+  const [addModal, setAddModal] = useState(false);
+
+  console.log("addModal", addModal);
   const { data, isLoading } = api.contacts.getAll.useQuery();
 
   const NavIcon = ({ icon }: { icon: IconDefinition }) => {
@@ -40,6 +45,9 @@ const Home: NextPage = () => {
       </Head>
       <main className="to-site-purple-r from-site-blue-r flex h-screen flex-col items-center justify-center bg-gradient-to-bl p-10">
         <div className="flex h-full w-full flex-row rounded-lg bg-white">
+          {addModal ? (
+            <AddModal addModal={addModal} setAddModal={setAddModal} />
+          ) : null}
           <div className="flex w-14 flex-col items-center">
             <NavIcon icon={faBars} />
             <NavIcon icon={faBars} />
@@ -93,7 +101,10 @@ const Home: NextPage = () => {
                       style={{ height: "20px", width: "20px" }}
                     />
                   </div>
-                  <div className="bg-site-blue-r flex h-10 w-36 items-center justify-evenly rounded-md text-sm text-white">
+                  <div
+                    className="bg-site-blue-r flex h-10 w-36 items-center justify-evenly rounded-md text-sm text-white"
+                    onClick={() => setAddModal(!addModal)}
+                  >
                     <FontAwesomeIcon
                       icon={faUserPlus}
                       style={{ height: "20px", width: "20px" }}
@@ -116,7 +127,6 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        {/* <SignOutButton /> */}
       </main>
     </>
   );
