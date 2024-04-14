@@ -1,4 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
 export const AddModal = (props: {
@@ -13,17 +14,31 @@ export const AddModal = (props: {
     notes: "",
   });
 
-  const { mutate, isPending } = api.contacts.newContact.useMutation();
+  const { mutate, isPending } = api.contacts.newContact.useMutation({
+    onSuccess: () => {
+      setFormData({
+        name: "",
+        affiliation: "",
+        position: "",
+        company: "",
+        notes: "",
+      });
+      // void api.contacts.getAll.invalidate();
+    },
+    onError: () => {
+      toast.error("Failed to add new contact, please try again later!");
+    },
+  });
 
   const handleSubmit = () => {
     // props.setAddModal(false)
-    // mutate({
-    //   name: "TEST",
-    //   affiliation: "TEST",
-    //   position: "TEST",
-    //   company: "TEST",
-    //   notes: "TEST",
-    // });
+    mutate({
+      name: "TEST",
+      affiliation: "TEST",
+      position: "TEST",
+      company: "TEST",
+      notes: "TEST",
+    });
   };
 
   return (
