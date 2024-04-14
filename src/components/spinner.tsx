@@ -5,7 +5,6 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { DefaultContactPageData } from "../defaultData/contact";
 
 type LoadingPageContact = {
   name: string;
@@ -46,6 +45,57 @@ export const LoadingSpinner = (props: { size?: number }) => {
   );
 };
 export const ContactLoadingPage = () => {
+  const testData = [
+    {
+      name: "Emily Johnson",
+      affiliation: "Met at the gym",
+      position: "Head of Marketing",
+      company: "XYZ Corp",
+      recentActivity: "Product Launch Meeting",
+      activityDate: "April 19, 2024",
+    },
+    {
+      name: "Johnathon Smith",
+      affiliation: "Met at StirTrek",
+      position: "Professional Idiot in Training",
+      company: "ABCREEE Corp",
+      recentActivity: "Team Meeting",
+      activityDate: "October 20, 2024",
+    },
+    {
+      name: "Sarah Brown",
+      affiliation: "Tech Solutions LLC",
+      position: "Project Manager",
+      company: "Tech Solutions LLC",
+      recentActivity: "Client Demo",
+      activityDate: "September 22, 2024",
+    },
+    {
+      name: "Michael Davis",
+      affiliation: "XYZ Something Corp",
+      position: "Sales Manager",
+      company: "Something Cool",
+      recentActivity: "Strategy Meeting",
+      activityDate: "March 23, 2024",
+    },
+    {
+      name: "Jessica Lee",
+      affiliation: "Met at a random event",
+      position: "HR Specialist",
+      company: "Apple Incorporated",
+      recentActivity: "Recruitment Interview",
+      activityDate: "February 24, 2024",
+    },
+    {
+      name: "Daniel Wilson",
+      affiliation: "Tech Solutions LLC",
+      position: "Software Developer",
+      company: "Tech Solutions LLC",
+      recentActivity: "Code Review",
+      activityDate: "April 25, 2024",
+    },
+  ];
+
   const columnHelper = createColumnHelper<LoadingPageContact>();
 
   const columns = [
@@ -80,8 +130,7 @@ export const ContactLoadingPage = () => {
   ];
 
   const table = useReactTable({
-    data: DefaultContactPageData,
-    // data: [],
+    data: testData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
