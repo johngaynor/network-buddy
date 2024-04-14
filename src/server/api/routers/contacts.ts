@@ -6,6 +6,16 @@ import {
   // publicProcedure,
 } from "~/server/api/trpc";
 
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+import { TRPCError } from "@trpc/server";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  analytics: true,
+});
+
 export const contactsRouter = createTRPCRouter({
   getAll: privateProcedure.query(({ ctx }) => {
     const userId = ctx.userId;
@@ -50,6 +60,10 @@ export const contactsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.userId;
+
+      const { success } = await ratelimit.limit(userId);
+
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
       const contact = await ctx.db.contact.create({
         data: {
