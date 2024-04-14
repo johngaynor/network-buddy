@@ -5,7 +5,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { DefaultContactPageData } from "~/defaultData/contact";
+import { DefaultContactPageData } from "../defaultData/contact";
 
 type LoadingPageContact = {
   name: string;
