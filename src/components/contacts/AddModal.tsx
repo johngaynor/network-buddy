@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
@@ -13,6 +13,8 @@ export const AddModal = (props: {
     company: "",
     notes: "",
   });
+
+  console.log(formData);
 
   const { mutate, isPending } = api.contacts.newContact.useMutation({
     onSuccess: () => {
@@ -62,11 +64,7 @@ export const AddModal = (props: {
             {/*body*/}
             <div className="relative flex-auto p-6">
               <p className="text-blueGray-500 my-4 text-lg leading-relaxed">
-                I always felt like I could do anything. That’s the main thing
-                people are controlled by! Thoughts- their perception of
-                themselves! They're slowed down by their perception of
-                themselves. If you're taught you can’t do anything, you won’t do
-                anything. I was taught I could do everything.
+                Test body material
               </p>
             </div>
             {/*footer*/}
