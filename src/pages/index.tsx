@@ -1,8 +1,11 @@
 import Head from "next/head";
 import { useState } from "react";
-import { SignOutButton } from "@clerk/nextjs";
+// import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
-import { IconDefinition, faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  type IconDefinition,
+  faHouse,
+} from "@fortawesome/free-solid-svg-icons";
 import { ContactLoadingPage } from "~/components/spinner";
 import ContactTable from "~/components/contacts/ContactTable";
 import { AddModal } from "~/components/contacts/AddModal";

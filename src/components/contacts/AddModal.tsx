@@ -34,7 +34,7 @@ export const AddModal = (props: {
         company: "",
         notes: "",
       });
-      ctx.contacts.getAll.invalidate();
+      void ctx.contacts.getAll.invalidate();
       props.setAddModal(false);
     },
     onError: (err) => {
