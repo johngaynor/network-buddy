@@ -77,7 +77,7 @@ export const AddModal = (props: {
             <div className="relative flex flex-col p-6">
               {/* first row of inputs */}
               <div
-                className={`flex w-full flex-row ${formErrors.name || formErrors.affiliation ? "pb-2" : "pb-7"}`}
+                className={`flex w-full flex-row ${formErrors.name ?? formErrors.affiliation ? "pb-2" : "pb-7"}`}
               >
                 <div className="flex w-1/2 flex-col pr-3">
                   <label>Name</label>
@@ -114,7 +114,7 @@ export const AddModal = (props: {
               </div>
               {/* second row of inputs */}
               <div
-                className={`flex w-full flex-row ${formErrors.position || formErrors.company ? "pb-2" : "pb-7"}`}
+                className={`flex w-full flex-row ${formErrors.position ?? formErrors.company ? "pb-2" : "pb-7"}`}
               >
                 <div className="flex w-1/2 flex-col pr-3">
                   <label>Company</label>
