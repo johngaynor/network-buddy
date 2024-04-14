@@ -24,6 +24,7 @@ type Contact = {
   notes: string;
   position: string;
   company: string;
+  lastUpdated: Date;
   Interactions: Interaction[];
 };
 

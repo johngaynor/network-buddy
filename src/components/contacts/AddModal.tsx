@@ -1,4 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
+import { api } from "~/utils/api";
 
 export const AddModal = (props: {
   addModal: boolean;
@@ -11,6 +12,19 @@ export const AddModal = (props: {
     company: "",
     notes: "",
   });
+
+  const { mutate, isPending } = api.contacts.newContact.useMutation();
+
+  const handleSubmit = () => {
+    // props.setAddModal(false)
+    // mutate({
+    //   name: "TEST",
+    //   affiliation: "TEST",
+    //   position: "TEST",
+    //   company: "TEST",
+    //   notes: "TEST",
+    // });
+  };
 
   return (
     <>
@@ -52,7 +66,8 @@ export const AddModal = (props: {
               <button
                 className="mb-1 mr-1 rounded bg-emerald-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
                 type="button"
-                onClick={() => props.setAddModal(false)}
+                onClick={handleSubmit}
+                disabled={isPending}
               >
                 Save Changes
               </button>

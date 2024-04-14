@@ -1,4 +1,4 @@
-// import { z } from "zod";
+import { z } from "zod";
 
 import {
   createTRPCRouter,
@@ -19,6 +19,7 @@ export const contactsRouter = createTRPCRouter({
         notes: true,
         position: true,
         company: true,
+        lastUpdated: true,
         Interactions: {
           select: {
             title: true,
@@ -37,14 +38,33 @@ export const contactsRouter = createTRPCRouter({
       },
     });
   }),
-  // newContact: publicProcedure.query(({ ctx }) => {
-  //   return ctx.db.contact.create({
-  //     data: {
-  //       userId: "...",
-  //       name: "TEST CREATE",
-  //     },
-  //   });
-  // }),
+  newContact: privateProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        affiliation: z.string(),
+        position: z.string(),
+        company: z.string(),
+        notes: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+
+      const contact = await ctx.db.contact.create({
+        data: {
+          userId,
+          name: input.name,
+          affiliation: input.affiliation,
+          position: input.position,
+          company: input.company,
+          notes: input.notes,
+          lastUpdated: new Date(),
+        },
+      });
+
+      return contact;
+    }),
   // updateAffiliation: publicProcedure.query(({ ctx }) => {
   //   return ctx.db.contact.update({
   //     where: {

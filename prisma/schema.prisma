@@ -17,6 +17,7 @@ model Contact {
   notes        String
   company      String
   position     String
+  lastUpdated  DateTime @default(now())
   Interactions Interactions[]
 }
 
