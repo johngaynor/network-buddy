@@ -18,11 +18,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 
 const Home: NextPage = () => {
   const [addModal, setAddModal] = useState(false);
 
-  const { data, isLoading } = api.contacts.getAll.useQuery();
+  const { data, isLoading, error } = api.contacts.getAll.useQuery();
+
+  if (error) toast.error("Error retrieving contacts, please try again later!");
 
   const NavIcon = ({ icon }: { icon: IconDefinition }) => {
     return (

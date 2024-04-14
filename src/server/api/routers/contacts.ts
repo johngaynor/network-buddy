@@ -51,11 +51,11 @@ export const contactsRouter = createTRPCRouter({
   newContact: privateProcedure
     .input(
       z.object({
-        name: z.string(),
-        affiliation: z.string(),
-        position: z.string(),
-        company: z.string(),
-        notes: z.string(),
+        name: z.string().min(1),
+        affiliation: z.string().min(1),
+        position: z.string().min(1),
+        company: z.string().min(1),
+        notes: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {

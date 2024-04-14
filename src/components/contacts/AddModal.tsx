@@ -2,19 +2,28 @@ import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
+interface NewContactFormData {
+  name: string;
+  affiliation: string;
+  position: string;
+  company: string;
+  notes: string;
+}
+
 export const AddModal = (props: {
   addModal: boolean;
   setAddModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<NewContactFormData>({
     name: "",
     affiliation: "",
     position: "",
     company: "",
     notes: "",
   });
+  const [formErrors, setFormErrors] = useState<Partial<NewContactFormData>>({});
 
-  console.log(formData);
+  const ctx = api.useUtils();
 
   const { mutate, isPending } = api.contacts.newContact.useMutation({
     onSuccess: () => {
@@ -25,22 +34,33 @@ export const AddModal = (props: {
         company: "",
         notes: "",
       });
-      // void api.contacts.getAll.invalidate();
+      ctx.contacts.getAll.invalidate();
+      props.setAddModal(false);
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
       toast.error("Failed to add new contact, please try again later!");
     },
   });
 
   const handleSubmit = () => {
-    // props.setAddModal(false)
-    mutate({
-      name: "TEST",
-      affiliation: "TEST",
-      position: "TEST",
-      company: "TEST",
-      notes: "TEST",
-    });
+    const errors: Partial<NewContactFormData> = {};
+
+    if (!formData.name.length) errors.name = "The name field cannot be empty.";
+    if (!formData.affiliation.length)
+      errors.affiliation = "The affiliation field cannot be empty.";
+    if (!formData.position.length)
+      errors.position = "The position field cannot be empty.";
+    if (!formData.company.length)
+      errors.company = "The company field cannot be empty.";
+    if (!formData.notes.length)
+      errors.notes = "The notes field cannot be empty.";
+
+    if (!Object.keys(errors).length) {
+      mutate(formData);
+    } else {
+      setFormErrors(errors);
+    }
   };
 
   return (
@@ -51,7 +71,7 @@ export const AddModal = (props: {
           <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
             {/*header*/}
             <div className="border-blueGray-200 flex items-start justify-between rounded-t border-b border-solid p-5">
-              <h3 className="text-3xl font-semibold">Modal Title</h3>
+              <h3 className="text-3xl font-semibold">New Contact Form</h3>
               <button
                 className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
                 onClick={() => props.setAddModal(false)}
@@ -62,10 +82,60 @@ export const AddModal = (props: {
               </button>
             </div>
             {/*body*/}
-            <div className="relative flex-auto p-6">
-              <p className="text-blueGray-500 my-4 text-lg leading-relaxed">
-                Test body material
-              </p>
+            <div className="relative flex flex-auto flex-col p-6">
+              <input
+                className="border-2"
+                placeholder="Name..."
+                id="name"
+                required
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                value={formData.name}
+              />
+              {formErrors.name ? (
+                <p className="text-red-500">{formErrors.name}</p>
+              ) : null}
+
+              <input
+                className="border-2"
+                placeholder="Affiliation..."
+                id="affiliation"
+                required
+                onChange={(e) =>
+                  setFormData({ ...formData, affiliation: e.target.value })
+                }
+                value={formData.affiliation}
+              />
+              <input
+                className="border-2"
+                placeholder="Position..."
+                id="position"
+                required
+                onChange={(e) =>
+                  setFormData({ ...formData, position: e.target.value })
+                }
+                value={formData.position}
+              />
+              <input
+                className="border-2"
+                placeholder="Company..."
+                id="company"
+                required
+                onChange={(e) =>
+                  setFormData({ ...formData, company: e.target.value })
+                }
+                value={formData.company}
+              />
+              <input
+                className="border-2"
+                placeholder="Notes..."
+                id="notes"
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
+                value={formData.notes}
+              />
             </div>
             {/*footer*/}
             <div className="border-blueGray-200 flex items-center justify-end rounded-b border-t border-solid p-6">
@@ -82,7 +152,7 @@ export const AddModal = (props: {
                 onClick={handleSubmit}
                 disabled={isPending}
               >
-                Save Changes
+                Submit
               </button>
             </div>
           </div>
