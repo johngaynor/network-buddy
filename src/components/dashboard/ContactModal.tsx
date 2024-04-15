@@ -1,10 +1,12 @@
 import { type Dispatch, type SetStateAction } from "react";
 import { useRouter } from "next/navigation";
+import { useContacts } from "~/store/AppStore";
 // import { api } from "~/utils/api";
 
 export const ContactModal = (props: {
   setContactModal: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const contacts = useContacts();
   // const ctx = api.useUtils();
   const router = useRouter();
 

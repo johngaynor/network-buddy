@@ -5,6 +5,7 @@ import { ContactLoadingPage } from "~/components/spinner";
 import ContactTable from "~/components/dashboard/ContactTable";
 import { AddModal } from "~/components/dashboard/AddModal";
 import { ContactModal } from "~/components/dashboard/ContactModal";
+import { useContacts, useSetContacts } from "~/store/AppStore";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,8 +21,12 @@ import toast from "react-hot-toast";
 const Home: NextPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
   const [contactModal, setContactModal] = useState<boolean>(true);
+  const setContacts = useSetContacts();
+  const contacts = useContacts();
 
   const { data, isLoading, error } = api.contacts.getAll.useQuery();
+
+  if (data && !contacts.length) setContacts(data);
 
   if (error) toast.error("Error retrieving contacts, please try again later!");
 
