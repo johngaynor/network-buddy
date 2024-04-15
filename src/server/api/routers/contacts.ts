@@ -32,6 +32,7 @@ export const contactsRouter = createTRPCRouter({
         company: true,
         lastUpdated: true,
         Interactions: {
+          take: 1,
           select: {
             title: true,
             location: true,

@@ -56,15 +56,10 @@ const columns = [
     header: () => "RECENT ACTIVITY",
     cell: (info) => {
       const interactions = info.getValue();
-      if (interactions.length === 0) {
-        return "--"; // Handle case when there are no interactions
-      }
 
-      const sorted = interactions.sort(
-        (a, b) => b.date.getTime() - a.date.getTime(),
-      );
-      const recent = sorted[0];
-      return recent?.title;
+      if (!interactions || interactions.length === 0) {
+        return "--";
+      } else return interactions[0]?.title ?? "--";
     },
     size: 90,
   }),
@@ -73,18 +68,12 @@ const columns = [
     id: "activity_date",
     cell: (info) => {
       const interactions = info.getValue();
-      if (interactions.length === 0) {
-        return "--"; // Handle case when there are no interactions
-      }
-
-      const sorted = interactions.sort(
-        (a, b) => b.date.getTime() - a.date.getTime(),
-      );
-      const recent = sorted[0];
-      const convertedDate = DateTime.fromJSDate(
-        recent?.date ?? new Date(),
-      ).toFormat("MMMM dd, yyyy");
-      return `${convertedDate}`;
+      if (!interactions || interactions.length === 0) {
+        return "--";
+      } else
+        return DateTime.fromJSDate(
+          interactions[0]?.date ?? new Date(),
+        ).toFormat("MMMM dd, yyyy");
     },
     size: 90,
   }),
