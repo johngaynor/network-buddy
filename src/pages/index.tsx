@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import { ContactLoadingPage } from "~/components/spinner";
 import ContactTable from "~/components/dashboard/ContactTable";
 import { AddModal } from "~/components/dashboard/AddModal";
-import { ContactModal } from "~/components/dashboard/ContactModal";
-import { useContacts, useSetContacts } from "~/store/AppStore";
+import { useSetContacts } from "~/store/AppStore";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,20 +19,21 @@ import toast from "react-hot-toast";
 
 const Home: NextPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
-  const [contactModal, setContactModal] = useState<boolean>(true);
   const setContacts = useSetContacts();
-  const contacts = useContacts();
 
   const { data, isLoading, error } = api.contacts.getAll.useQuery();
 
-  if (data && !contacts.length) setContacts(data);
+  useEffect(() => {
+    if (data) {
+      setContacts(data);
+    }
+  }, [data, setContacts]);
 
   if (error) toast.error("Error retrieving contacts, please try again later!");
 
   return (
     <>
       {addModal ? <AddModal setAddModal={setAddModal} /> : null}
-      {contactModal ? <ContactModal setContactModal={setContactModal} /> : null}
       <div className="flex h-16 justify-between">
         <div className="flex w-1/3 items-center justify-between">
           <p className="text-3xl text-site-purple-r">Contacts</p>

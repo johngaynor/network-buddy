@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -6,7 +7,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { DateTime } from "luxon";
-import { useRouter } from "next/navigation";
+import { ContactModal } from "~/components/dashboard/ContactModal";
 
 type Highlight = {
   highlight: string;
@@ -90,7 +91,7 @@ const columns = [
 ];
 
 const ContactTable = ({ data }: { data: Contact[] }) => {
-  const router = useRouter();
+  const [contactModal, setContactModal] = useState<null | number>(null);
   const table = useReactTable({
     data: data ?? [],
     columns,
@@ -109,46 +110,54 @@ const ContactTable = ({ data }: { data: Contact[] }) => {
   if (!table) return "Error, no data to display";
 
   return (
-    <table className="mt-5">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup, i) => (
-          <tr key={headerGroup.id + i}>
-            {headerGroup.headers.map((header, i) => (
-              <th
-                key={header.id + i}
-                className={`px-3 text-left text-sm text-[#b5bfc3] ${i === 0 ? "pl-10" : null}`}
-              >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row, i) => (
-          <tr
-            key={row.id + i}
-            className="h-12 rounded-xl border-y-8 border-gray-100 bg-white text-[#999]"
-            onClick={() => router.push(`/contact/${row.original.id}`)}
-          >
-            {row.getVisibleCells().map((cell, i) => (
-              <td
-                key={cell.id + i}
-                style={{ width: cell.column.getSize() }}
-                className={`p-3 ${i === 0 ? "pl-10" : null}`}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      {contactModal ? (
+        <ContactModal
+          contactModal={contactModal}
+          setContactModal={setContactModal}
+        />
+      ) : null}
+      <table className="mt-5">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup, i) => (
+            <tr key={headerGroup.id + i}>
+              {headerGroup.headers.map((header, i) => (
+                <th
+                  key={header.id + i}
+                  className={`px-3 text-left text-sm text-[#b5bfc3] ${i === 0 ? "pl-10" : null}`}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row, i) => (
+            <tr
+              key={row.id + i}
+              className="h-12 rounded-xl border-y-8 border-gray-100 bg-white text-[#999]"
+              onClick={() => setContactModal(row.original.id)}
+            >
+              {row.getVisibleCells().map((cell, i) => (
+                <td
+                  key={cell.id + i}
+                  style={{ width: cell.column.getSize() }}
+                  className={`p-3 ${i === 0 ? "pl-10" : null}`}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 
