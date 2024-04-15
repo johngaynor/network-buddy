@@ -11,7 +11,6 @@ interface NewContactFormData {
 }
 
 export const AddModal = (props: {
-  addModal: boolean;
   setAddModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [formData, setFormData] = useState<NewContactFormData>({

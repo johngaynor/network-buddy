@@ -2,8 +2,9 @@ import { useState } from "react";
 // import { SignOutButton } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import { ContactLoadingPage } from "~/components/spinner";
-import ContactTable from "~/components/contacts/ContactTable";
-import { AddModal } from "~/components/contacts/AddModal";
+import ContactTable from "~/components/dashboard/ContactTable";
+import { AddModal } from "~/components/dashboard/AddModal";
+import { ContactModal } from "~/components/dashboard/ContactModal";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,7 +18,8 @@ import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 
 const Home: NextPage = () => {
-  const [addModal, setAddModal] = useState(false);
+  const [addModal, setAddModal] = useState<boolean>(false);
+  const [contactModal, setContactModal] = useState<boolean>(true);
 
   const { data, isLoading, error } = api.contacts.getAll.useQuery();
 
@@ -25,9 +27,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      {addModal ? (
-        <AddModal addModal={addModal} setAddModal={setAddModal} />
-      ) : null}
+      {addModal ? <AddModal setAddModal={setAddModal} /> : null}
+      {contactModal ? <ContactModal setContactModal={setContactModal} /> : null}
       <div className="flex h-16 justify-between">
         <div className="flex w-1/3 items-center justify-between">
           <p className="text-3xl text-site-purple-r">Contacts</p>
