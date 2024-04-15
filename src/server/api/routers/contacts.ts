@@ -24,6 +24,7 @@ export const contactsRouter = createTRPCRouter({
         userId: userId,
       },
       select: {
+        id: true,
         name: true,
         affiliation: true,
         notes: true,

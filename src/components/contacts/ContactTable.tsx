@@ -6,6 +6,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 
 type Highlight = {
   highlight: string;
@@ -19,6 +20,7 @@ type Interaction = {
 };
 
 type Contact = {
+  id: number;
   name: string;
   affiliation: string;
   notes: string;
@@ -49,18 +51,6 @@ const columns = [
     header: () => "COMPANY",
     cell: (info) => info.renderValue(),
   }),
-  // columnHelper.accessor("notes", {
-  //   header: "Notes",
-  //   cell: (info) => {
-  //     const val = info.getValue();
-  //     const maxLength = 35;
-  //     const truncatedVal =
-  //       val && val.length > maxLength
-  //         ? val.substring(0, maxLength) + "..."
-  //         : val;
-  //     return truncatedVal;
-  //   },
-  // }),
   columnHelper.accessor("Interactions", {
     header: () => "RECENT ACTIVITY",
     cell: (info) => {
@@ -100,6 +90,7 @@ const columns = [
 ];
 
 const ContactTable = ({ data }: { data: Contact[] }) => {
+  const router = useRouter();
   const table = useReactTable({
     data: data ?? [],
     columns,
@@ -107,10 +98,6 @@ const ContactTable = ({ data }: { data: Contact[] }) => {
     getSortedRowModel: getSortedRowModel(),
     initialState: {
       sorting: [
-        // {
-        //   id: "activity_date",
-        //   desc: false,
-        // },
         {
           id: "name",
           desc: true,
@@ -147,6 +134,7 @@ const ContactTable = ({ data }: { data: Contact[] }) => {
           <tr
             key={row.id + i}
             className="h-12 rounded-xl border-y-8 border-gray-100 bg-white text-[#999]"
+            onClick={() => router.push(`/contact/${row.original.id}`)}
           >
             {row.getVisibleCells().map((cell, i) => (
               <td
