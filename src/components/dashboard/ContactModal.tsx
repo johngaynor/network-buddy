@@ -8,7 +8,7 @@ export const ContactModal = (props: {
   contactModal: null | number;
   setContactModal: Dispatch<SetStateAction<null | number>>;
 }) => {
-  const contacts = useContacts();
+  const contacts: Contact[] = useContacts();
   const router = useRouter();
 
   const { contactModal, setContactModal } = props;
@@ -24,8 +24,6 @@ export const ContactModal = (props: {
 
   const { name, affiliation, company, position, notes, Interactions } =
     activeContact;
-
-  // console.log(Interactions[0]?.Highlights[0]?.highlight);
 
   return (
     <>
@@ -66,10 +64,15 @@ export const ContactModal = (props: {
                 </div>
                 <div className="flex w-2/3 flex-col">
                   <label>Activity Highlights</label>
+                  {/* Stupid workaround bc typescript wasn't recognizing the "highlight" property on the Highlights objects */}
                   {Interactions[0]?.Highlights.map((h, i) => (
-                    <p className="mt-1 text-xl font-semibold" key={i}>
-                      - {h.highlight}
-                    </p>
+                    <div key={i}>
+                      {Object.entries(h).map(([key, value]) => (
+                        <p className="mt-1 text-xl font-semibold" key={key}>
+                          - {value}
+                        </p>
+                      ))}
+                    </div>
                   ))}
                 </div>
               </div>
