@@ -13,7 +13,9 @@ export const ContactModal = (props: {
 
   const { contactModal, setContactModal } = props;
 
-  const activeContact = contacts.find((c) => c.id === contactModal);
+  const activeContact: Contact | undefined = contacts.find(
+    (c) => c.id === contactModal,
+  );
 
   if (!activeContact) {
     toast.error("There is no contact with this ID...");
@@ -23,7 +25,7 @@ export const ContactModal = (props: {
   const { name, affiliation, company, position, notes, Interactions } =
     activeContact;
 
-  console.log(Interactions);
+  // console.log(Interactions[0]?.Highlights[0]?.highlight);
 
   return (
     <>
