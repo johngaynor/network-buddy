@@ -56,24 +56,32 @@ export const ContactModal = (props: {
                 <div className="flex w-1/3 flex-col">
                   <label>Last Activity</label>
                   <p className="mt-1 text-xl font-semibold">
-                    {Interactions[0]?.title} on{" "}
-                    {DateTime.fromJSDate(
-                      Interactions[0]?.date ?? new Date(),
-                    ).toFormat("MMMM dd, yyyy")}
+                    {Interactions.length !== 0
+                      ? Interactions[0]?.title +
+                        " on " +
+                        DateTime.fromJSDate(
+                          Interactions[0]?.date ?? new Date(),
+                        ).toFormat("MMMM dd, yyyy")
+                      : "--"}
                   </p>
                 </div>
                 <div className="flex w-2/3 flex-col">
                   <label>Activity Highlights</label>
                   {/* Stupid workaround bc typescript wasn't recognizing the "highlight" property on the Highlights objects */}
-                  {Interactions[0]?.Highlights.map((h, i) => (
-                    <div key={i}>
-                      {Object.entries(h).map(([key, value]) => (
-                        <p className="mt-1 text-xl font-semibold" key={key}>
-                          - {value}
-                        </p>
-                      ))}
-                    </div>
-                  ))}
+                  {Interactions.length !== 0 &&
+                  Interactions[0]?.Highlights.length !== 0 ? (
+                    Interactions[0]?.Highlights.map((h, i) => (
+                      <div key={i}>
+                        {Object.entries(h).map(([key, value]) => (
+                          <p className="mt-1 text-xl font-semibold" key={key}>
+                            - {value}
+                          </p>
+                        ))}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="mt-1 text-xl font-semibold">--</p>
+                  )}
                 </div>
               </div>
             </div>
