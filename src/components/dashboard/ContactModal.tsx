@@ -1,6 +1,5 @@
 import { type Dispatch, type SetStateAction } from "react";
 import { useRouter } from "next/navigation";
-import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
 import type { Contact } from "contact";
@@ -8,11 +7,11 @@ import type { Contact } from "contact";
 export const ContactModal = (props: {
   contactModal: null | number;
   setContactModal: Dispatch<SetStateAction<null | number>>;
+  contacts: Contact[];
 }) => {
-  const contacts: Contact[] = useContacts();
   const router = useRouter();
 
-  const { contactModal, setContactModal } = props;
+  const { contactModal, setContactModal, contacts } = props;
 
   const activeContact: Contact | undefined = contacts.find(
     (c) => c.id === contactModal,
@@ -33,8 +32,6 @@ export const ContactModal = (props: {
     intDate,
     intHighlights,
   } = activeContact;
-
-  console.log(intHighlights[0]?.highlight);
 
   return (
     <>

@@ -25,7 +25,7 @@ export const AddModal = (props: {
   const ctx = api.useUtils();
   const { setAddModal } = props;
 
-  const { mutate, isPending } = api.contacts.newContact.useMutation({
+  const { mutate, isPending } = api.contacts.new.useMutation({
     onSuccess: () => {
       toast.success(`Successfully added ${formData.name} as a contact!`);
       setFormData({

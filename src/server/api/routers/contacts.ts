@@ -61,7 +61,36 @@ export const contactsRouter = createTRPCRouter({
     });
     return filteredContacts;
   }),
-  newContact: privateProcedure
+  getInteractions: privateProcedure
+    .input(
+      z.object({
+        contactId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      if (!input.contactId) return;
+      return ctx.db.interactions.findMany({
+        where: {
+          contactId: input.contactId,
+        },
+        select: {
+          id: true,
+          title: true,
+          location: true,
+          date: true,
+          Highlights: {
+            select: {
+              highlight: true,
+              id: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "desc",
+        },
+      });
+    }),
+  new: privateProcedure
     .input(
       z.object({
         name: z.string().min(1),

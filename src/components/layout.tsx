@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import {
   type IconDefinition,
   faHouse,
@@ -11,6 +11,9 @@ import {
   faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { Inter } from "next/font/google";
+import { api } from "~/utils/api";
+import { useSetContacts, useSetContactsLoading } from "~/store/AppStore";
+import toast from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +29,24 @@ const NavIcon = ({ icon }: { icon: IconDefinition }) => {
 };
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const setContacts = useSetContacts();
+  const setContactsLoading = useSetContactsLoading();
+  const {
+    data: contacts,
+    isLoading: contactsLoading,
+    error: contactsError,
+  } = api.contacts.getAll.useQuery();
+
+  useEffect(() => {
+    if (contacts) {
+      setContacts(contacts);
+    }
+    setContactsLoading(contactsLoading);
+  }, [contacts, setContacts]);
+
+  if (contactsError)
+    toast.error("Error retrieving contacts, please try again later!");
+
   return (
     <>
       <Head>
