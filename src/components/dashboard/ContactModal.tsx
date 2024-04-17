@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
-import type { Highlight, Contact } from "contact";
+import type { Contact } from "contact";
 
 export const ContactModal = (props: {
   contactModal: null | number;

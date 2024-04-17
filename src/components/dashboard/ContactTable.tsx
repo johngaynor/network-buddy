@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { DateTime } from "luxon";
 import { ContactModal } from "~/components/dashboard/ContactModal";
+import type { Contact } from "contact";
 
 const columnHelper = createColumnHelper<Contact>();
 
