@@ -52,9 +52,9 @@ export const contactsRouter = createTRPCRouter({
     const filteredContacts = contacts.map((c) => {
       const { Interactions, ...rest } = c;
 
-      const intTitle = Interactions[0]?.title || null;
-      const intDate = Interactions[0]?.date || null;
-      const intHighlights = Interactions[0]?.Highlights || [];
+      const intTitle = Interactions[0]?.title ?? null;
+      const intDate = Interactions[0]?.date ?? null;
+      const intHighlights = Interactions[0]?.Highlights ?? [];
 
       const newContact = { ...rest, intTitle, intDate, intHighlights };
       return newContact;
