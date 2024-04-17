@@ -9,28 +9,6 @@ import {
 import { DateTime } from "luxon";
 import { ContactModal } from "~/components/dashboard/ContactModal";
 
-type Highlight = {
-  highlight: string;
-};
-
-type Interaction = {
-  title: string;
-  location: string;
-  date: Date;
-  Highlights: Highlight[];
-};
-
-type Contact = {
-  id: number;
-  name: string;
-  affiliation: string;
-  notes: string;
-  position: string;
-  company: string;
-  lastUpdated: Date;
-  Interactions: Interaction[];
-};
-
 const columnHelper = createColumnHelper<Contact>();
 
 const columns = [
@@ -52,28 +30,27 @@ const columns = [
     header: () => "COMPANY",
     cell: (info) => info.renderValue(),
   }),
-  columnHelper.accessor("Interactions", {
+  columnHelper.accessor("intTitle", {
     header: () => "RECENT ACTIVITY",
     cell: (info) => {
-      const interactions = info.getValue();
-
-      if (!interactions || interactions.length === 0) {
+      const title = info.getValue();
+      if (!title) {
         return "--";
-      } else return interactions[0]?.title ?? "--";
+      } else return title;
     },
     size: 90,
   }),
-  columnHelper.accessor("Interactions", {
+  columnHelper.accessor("intDate", {
     header: () => "ACTIVITY DATE",
     id: "activity_date",
     cell: (info) => {
-      const interactions = info.getValue();
-      if (!interactions || interactions.length === 0) {
+      const date = info.getValue();
+      if (!date) {
         return "--";
       } else
-        return DateTime.fromJSDate(
-          interactions[0]?.date ?? new Date(),
-        ).toFormat("MMMM dd, yyyy");
+        return DateTime.fromJSDate(date ?? new Date()).toFormat(
+          "MMMM dd, yyyy",
+        );
     },
     size: 90,
   }),
