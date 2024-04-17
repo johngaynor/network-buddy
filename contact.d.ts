@@ -1,8 +1,8 @@
-type Highlight = {
+export type Highlight = {
   highlight: string;
 };
 
-type Contact = {
+export type Contact = {
   id: number;
   name: string;
   affiliation: string;

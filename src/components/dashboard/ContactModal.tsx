@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
+import type { Highlight, Contact } from "contact";
 
 export const ContactModal = (props: {
   contactModal: null | number;
@@ -22,8 +23,18 @@ export const ContactModal = (props: {
     return;
   }
 
-  const { name, affiliation, company, position, notes, Interactions } =
-    activeContact;
+  const {
+    name,
+    affiliation,
+    company,
+    position,
+    notes,
+    intTitle,
+    intDate,
+    intHighlights,
+  } = activeContact;
+
+  console.log(intHighlights[0]?.highlight);
 
   return (
     <>
@@ -56,28 +67,20 @@ export const ContactModal = (props: {
                 <div className="flex w-1/3 flex-col">
                   <label>Last Activity</label>
                   <p className="mt-1 text-xl font-semibold">
-                    {Interactions.length !== 0
-                      ? Interactions[0]?.title +
+                    {intTitle && intDate
+                      ? intTitle +
                         " on " +
-                        DateTime.fromJSDate(
-                          Interactions[0]?.date ?? new Date(),
-                        ).toFormat("MMMM dd, yyyy")
+                        DateTime.fromJSDate(intDate).toFormat("MMMM dd, yyyy")
                       : "--"}
                   </p>
                 </div>
                 <div className="flex w-2/3 flex-col">
                   <label>Activity Highlights</label>
-                  {/* Stupid workaround bc typescript wasn't recognizing the "highlight" property on the Highlights objects */}
-                  {Interactions.length !== 0 &&
-                  Interactions[0]?.Highlights.length !== 0 ? (
-                    Interactions[0]?.Highlights.map((h, i) => (
-                      <div key={i}>
-                        {Object.entries(h).map(([key, value]) => (
-                          <p className="mt-1 text-xl font-semibold" key={key}>
-                            - {value}
-                          </p>
-                        ))}
-                      </div>
+                  {intHighlights.length ? (
+                    intHighlights.map((h, i) => (
+                      <p className="mt-1 text-xl font-semibold" key={i}>
+                        - {h.highlight}
+                      </p>
                     ))
                   ) : (
                     <p className="mt-1 text-xl font-semibold">--</p>
