@@ -9,7 +9,7 @@ import { ProfileTab } from "~/components/contact/ContactTabs";
 
 const ProfileSectionTab = (props: { title: string }) => {
   return (
-    <p className="text-md w-fit rounded-full px-4 py-2 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r">
+    <p className="text-md w-fit rounded-full px-4 pb-4 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r">
       {props.title}
     </p>
   );

@@ -1,7 +1,7 @@
 import { type Contact } from "contact";
 import { type NextPage } from "next";
 import { useState } from "react";
-import { ContactLoadingPage } from "~/components/spinner";
+import { ContactLoadingPage } from "~/components/loading";
 import { AddModal } from "~/components/dashboard/AddModal";
 import { useContactsLoading, useContacts } from "~/store/AppStore";
 import {

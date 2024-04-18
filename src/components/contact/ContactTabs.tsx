@@ -25,7 +25,7 @@ export const ProfileTab = (props: { contactObj: any }) => {
   const { contactObj } = props;
   return (
     <>
-      <p className="py-2 text-lg font-semibold">Profile</p>
+      <p className="pb-2 text-lg font-semibold">Profile</p>
       <div className="flex h-32 flex-row items-center justify-between rounded-xl border-2 px-5">
         <div className="flex">
           <div className="h-20 w-20 rounded-full border-2 border-site-purple-r"></div>
