@@ -24,7 +24,6 @@ const TextField = (props: { label: string; text: string }) => {
 
 export const ProfileTab = (props: { contactObj: ContactObj }) => {
   const { contactObj } = props;
-  console.log(contactObj);
   return (
     <>
       <p className="pb-2 text-lg font-semibold">Profile</p>

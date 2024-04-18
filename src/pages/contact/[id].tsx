@@ -8,17 +8,24 @@ import type { Contact, ContactObj, Interaction } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
 import { ProfileTab } from "~/components/contact/ContactTabs";
-
-const ProfileSectionTab = (props: { title: string }) => {
-  return (
-    <p className="text-md w-fit rounded-full px-4 py-2 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r">
-      {props.title}
-    </p>
-  );
-};
+import { InteractionsTab } from "~/components/contact/InteractionsTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
-  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(0);
+  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(1);
+  const ProfileSectionTab = (props: {
+    title: string;
+    index: 0 | 1 | 2 | 3;
+  }) => {
+    const { title, index } = props;
+    return (
+      <p
+        className="text-md w-fit rounded-full px-4 py-2 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r"
+        onClick={() => setActiveTab(index)}
+      >
+        {title}
+      </p>
+    );
+  };
 
   const { contactId, contact } = props;
   const { data, isLoading, error } = api.contacts.getInteractions.useQuery({
@@ -43,13 +50,14 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
       </div>
       <div className="flex h-full w-full flex-row rounded-lg bg-white p-4">
         <div className="flex w-48 flex-col border-r-2">
-          <ProfileSectionTab title="Profile" />
-          <ProfileSectionTab title="Interactions" />
-          <ProfileSectionTab title="History" />
-          <ProfileSectionTab title="Opportunities" />
+          <ProfileSectionTab title="Profile" index={0} />
+          <ProfileSectionTab title="Interactions" index={1} />
+          <ProfileSectionTab title="History" index={2} />
+          <ProfileSectionTab title="Opportunities" index={3} />
         </div>
         <div className="w-full pl-6">
-          <ProfileTab contactObj={contactObj} />
+          {activeTab === 0 ? <ProfileTab contactObj={contactObj} /> : null}
+          {activeTab === 1 ? <InteractionsTab contactObj={contactObj} /> : null}
         </div>
       </div>
     </>
