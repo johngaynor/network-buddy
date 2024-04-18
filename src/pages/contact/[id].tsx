@@ -19,7 +19,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
     const { title, index } = props;
     return (
       <p
-        className="text-md w-fit rounded-full px-4 py-2 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r"
+        className={`text-md w-fit rounded-full px-4 py-2 transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r ${index === activeTab ? null : "text-[#8099a7]"}`}
         onClick={() => setActiveTab(index)}
       >
         {title}
