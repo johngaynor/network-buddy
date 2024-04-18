@@ -4,12 +4,13 @@ import { api } from "~/utils/api";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import type { Contact } from "contact";
+import { ContactLoadingPage } from "~/components/loading";
 
 import { ProfileTab } from "~/components/contact/ContactTabs";
 
 const ProfileSectionTab = (props: { title: string }) => {
   return (
-    <p className="text-md w-fit rounded-full px-4 pb-4 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r">
+    <p className="text-md w-fit rounded-full px-4 py-2 text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r">
       {props.title}
     </p>
   );
@@ -26,10 +27,8 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const { intTitle, intDate, intHighlights, ...rest } = contact;
   const contactObj = { ...rest, interactions: data };
 
-  console.log(contactObj);
-
   if (isLoading || !data) {
-    return "loading...";
+    return <ContactLoadingPage />;
   }
 
   return (
@@ -66,7 +65,7 @@ const ContactPage: NextPage = () => {
 
   if (contactId && contact) {
     return <ProfileSection contactId={contactId} contact={contact} />;
-  } else return "no contact id, show loading screen";
+  } else return <ContactLoadingPage />;
 };
 
 export default ContactPage;

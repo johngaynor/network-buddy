@@ -30,9 +30,13 @@ export const ProfileTab = (props: { contactObj: any }) => {
         <div className="flex">
           <div className="h-20 w-20 rounded-full border-2 border-site-purple-r"></div>
           <div className="pl-4">
-            <p className="pb-1 text-xl">{contactObj.name}</p>
-            <p className="text-md text-[#8099a7]">{contactObj.position}</p>
-            <p className="text-md text-[#8099a7]">{contactObj.company}</p>
+            <p className="pb-1 text-xl">{contactObj.name ?? "--"}</p>
+            <p className="text-md text-[#8099a7]">
+              {contactObj.position ?? "--"}
+            </p>
+            <p className="text-md text-[#8099a7]">
+              {contactObj.company ?? "--"}
+            </p>
           </div>
         </div>
         <EditButton />
