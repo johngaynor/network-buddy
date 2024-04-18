@@ -9,6 +9,8 @@ import { ContactLoadingPage } from "~/components/loading";
 
 import { ProfileTab } from "~/components/contact/ProfileTab";
 import { InteractionsTab } from "~/components/contact/InteractionsTab";
+import { HistoryTab } from "~/components/contact/HistoryTab";
+import { OpportunitiesTab } from "~/components/contact/OpportunitiesTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(1);
@@ -58,6 +60,8 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
         <div className="w-full pl-6">
           {activeTab === 0 ? <ProfileTab contactObj={contactObj} /> : null}
           {activeTab === 1 ? <InteractionsTab contactObj={contactObj} /> : null}
+          {activeTab === 2 ? <HistoryTab /> : null}
+          {activeTab === 3 ? <OpportunitiesTab /> : null}
         </div>
       </div>
     </>
