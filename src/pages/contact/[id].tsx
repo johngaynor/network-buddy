@@ -28,7 +28,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   if (error) toast.error("Error retrieving interactions: " + error.message);
 
   const { intTitle, intDate, intHighlights, ...rest } = contact;
-  const contactObj: ContactObj = { ...rest, interactions: data || [] };
+  const contactObj: ContactObj = { ...rest, interactions: data ?? [] };
 
   if (isLoading || !data) {
     return <ContactLoadingPage />;
