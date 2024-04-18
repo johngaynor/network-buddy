@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { NextPage } from "next";
 import { api } from "~/utils/api";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
-import type { Contact } from "contact";
+import type { Contact, ContactObj, Interaction } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
 import { ProfileTab } from "~/components/contact/ContactTabs";
@@ -17,6 +18,8 @@ const ProfileSectionTab = (props: { title: string }) => {
 };
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
+  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(0);
+
   const { contactId, contact } = props;
   const { data, isLoading, error } = api.contacts.getInteractions.useQuery({
     contactId,
@@ -25,7 +28,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   if (error) toast.error("Error retrieving interactions: " + error.message);
 
   const { intTitle, intDate, intHighlights, ...rest } = contact;
-  const contactObj = { ...rest, interactions: data };
+  const contactObj: ContactObj = { ...rest, interactions: data || [] };
 
   if (isLoading || !data) {
     return <ContactLoadingPage />;

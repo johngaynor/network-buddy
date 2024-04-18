@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import type { ContactObj } from "contact";
 
 const EditButton = () => (
   <div className="flex h-10 w-20 items-center justify-evenly rounded-full bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
@@ -21,8 +22,9 @@ const TextField = (props: { label: string; text: string }) => {
   );
 };
 
-export const ProfileTab = (props: { contactObj: any }) => {
+export const ProfileTab = (props: { contactObj: ContactObj }) => {
   const { contactObj } = props;
+  console.log(contactObj);
   return (
     <>
       <p className="pb-2 text-lg font-semibold">Profile</p>
