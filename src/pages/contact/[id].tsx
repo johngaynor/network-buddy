@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import type { Contact, ContactObj, Interaction } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
-import { ProfileTab } from "~/components/contact/ContactTabs";
+import { ProfileTab } from "~/components/contact/ProfileTab";
 import { InteractionsTab } from "~/components/contact/InteractionsTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
