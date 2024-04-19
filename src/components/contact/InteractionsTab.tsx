@@ -63,7 +63,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
 
   return (
     <>
-      {activeInteraction || editMode ? (
+      {activeInteraction ?? editMode ? (
         <InteractionModal
           editMode={editMode}
           setEditMode={setEditMode}

@@ -79,9 +79,7 @@ export const EditInteractionModal = (props: {
                   date: DateTime.fromISO(e.target.value).toJSDate(),
                 })
               }
-              value={
-                DateTime.fromJSDate(formData.date as Date).toISODate() ?? ""
-              }
+              value={DateTime.fromJSDate(formData.date).toISODate() ?? ""}
             />
             {formErrors.title ? (
               <p className="text-red-500">{formErrors.title}</p>
