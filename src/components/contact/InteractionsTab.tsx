@@ -3,33 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faSearch } from "@fortawesome/free-solid-svg-icons";
 import type { ContactObj, Interaction } from "contact";
 import { DateTime } from "luxon";
-
-const InteractionBox = (props: { interaction: Interaction }) => {
-  const { interaction: i } = props;
-
-  const date = DateTime.fromJSDate(i.date).toFormat("MMMM dd, yyyy");
-
-  return (
-    <div className="mb-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
-      <div className="w-4/5">
-        <p className="py-2 font-semibold">
-          {date} - {i.title} at {i.location}
-        </p>
-      </div>
-      <div className="mb-3 flex items-center">
-        <div className="flex h-10 w-24 items-center justify-evenly rounded-full bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
-          <p className="text-sm">Details</p>
-          <FontAwesomeIcon
-            icon={faEye}
-            style={{ height: "18px", width: "18px" }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
+import { InteractionModal } from "./InteractionModal";
 
 export const InteractionsTab = (props: { contactObj: ContactObj }) => {
+  const [interactionModal, setInteractionModal] = useState<null | number>(0);
   const [sortDesc, setSortDesc] = useState<boolean>(true);
   const [filter, setFilter] = useState<string>("");
 
@@ -51,8 +28,44 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
       return at - bt;
     });
 
+  const activeInteraction = interactions.find((i) => i.id === interactionModal);
+
+  const InteractionBox = (props: { interaction: Interaction }) => {
+    const { interaction: i } = props;
+
+    const date = DateTime.fromJSDate(i.date).toFormat("MMMM dd, yyyy");
+
+    return (
+      <div
+        className="mb-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3"
+        onClick={() => setInteractionModal(i.id)}
+      >
+        <div className="w-4/5">
+          <p className="py-2 font-semibold">
+            {date} - {i.title} at {i.location}
+          </p>
+        </div>
+        <div className="mb-3 flex items-center">
+          <div className="flex h-10 w-24 items-center justify-evenly rounded-full bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
+            <p className="text-sm">Details</p>
+            <FontAwesomeIcon
+              icon={faEye}
+              style={{ height: "18px", width: "18px" }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
+      {activeInteraction ? (
+        <InteractionModal
+          interaction={activeInteraction}
+          setInteractionModal={setInteractionModal}
+        />
+      ) : null}
       <div className="flex justify-between">
         <p className="pb-2 text-lg font-semibold">Interactions</p>
 

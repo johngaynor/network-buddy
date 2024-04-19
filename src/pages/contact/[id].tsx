@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import { api } from "~/utils/api";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
-import type { Contact, ContactObj, Interaction } from "contact";
+import type { Contact, ContactObj } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
 import { ProfileTab } from "~/components/contact/ProfileTab";
