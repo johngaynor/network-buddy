@@ -5,6 +5,8 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 type LoadingPageContact = {
   name: string;
@@ -16,6 +18,7 @@ type LoadingPageContact = {
 };
 
 export const LoadingSpinner = (props: { size?: number }) => {
+  const { size } = props;
   return (
     <div className="absolute h-full w-full">
       <div className="absolute inset-0 flex items-center justify-center bg-gray-300 bg-opacity-50 backdrop-blur-sm">
@@ -26,8 +29,8 @@ export const LoadingSpinner = (props: { size?: number }) => {
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            width={props.size ?? 16}
-            height={props.size ?? 16}
+            width={size ?? 16}
+            height={size ?? 16}
           >
             <path
               d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
@@ -44,7 +47,7 @@ export const LoadingSpinner = (props: { size?: number }) => {
     </div>
   );
 };
-export const ContactLoadingPage = () => {
+export const ContactTableLoadingPage = () => {
   const testData = [
     {
       name: "Emily Johnson",
@@ -180,3 +183,74 @@ export const ContactLoadingPage = () => {
     </div>
   );
 };
+
+const TextField = (props: { label: string; text: string }) => {
+  const { label, text } = props;
+  return (
+    <div>
+      <p className="text-sm text-[#8099a7]">{label}</p>
+      <p className="pb-5 pt-1">{text}</p>
+    </div>
+  );
+};
+
+const EditButton = () => (
+  <div className="flex h-10 w-20 items-center justify-evenly rounded-full bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
+    <p className="text-sm">Edit</p>
+    <FontAwesomeIcon
+      icon={faPenToSquare}
+      style={{ height: "18px", width: "18px" }}
+    />
+  </div>
+);
+
+export const ContactLoadingPage = () => (
+  <div className="relative h-full w-full">
+    <LoadingSpinner size={40} />
+    <p className="pb-2 text-lg font-semibold">Profile</p>
+    <div className="flex h-32 flex-row items-center justify-between rounded-xl border-2 px-5">
+      <div className="flex">
+        <div className="h-20 w-20 rounded-full border-2 border-site-purple-r"></div>
+        <div className="pl-4">
+          <p className="pb-1 text-xl">--</p>
+          <p className="text-md text-[#8099a7]">--</p>
+          <p className="text-md text-[#8099a7]">--</p>
+        </div>
+      </div>
+      <EditButton />
+    </div>
+    <div className="my-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
+      <div className="w-4/5">
+        <p className="py-2 font-semibold">--</p>
+        <div className="flex">
+          <div className="w-1/2 pr-3 pt-3">
+            <TextField label="Name" text="--" />
+            <TextField label="Position" text="--" />
+          </div>
+          <div className="w-1/2 pr-3 pt-3">
+            <TextField label="Affiliation" text="--" />
+            <TextField label="Company" text="--" />
+          </div>
+        </div>
+        <TextField label="General Notes" text="--" />
+      </div>
+      <EditButton />
+    </div>
+    <div className="flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
+      <div className="w-4/5">
+        <p className="py-2 font-semibold">Contact Information</p>
+        <div className="flex">
+          <div className="w-1/2 pr-3 pt-3">
+            <TextField label="Phone #" text="(###) ###-####" />
+          </div>
+          <div className="w-1/2 pr-3 pt-3">
+            <TextField label="Social Media" text="--" />
+          </div>
+        </div>
+      </div>
+      <div className="mb-3 flex items-center">
+        <EditButton />
+      </div>
+    </div>
+  </div>
+);

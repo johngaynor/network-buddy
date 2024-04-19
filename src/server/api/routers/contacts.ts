@@ -17,13 +17,14 @@ const ratelimit = new Ratelimit({
 });
 
 export const contactsRouter = createTRPCRouter({
-  getAll: privateProcedure.query(({ ctx }) => {
+  getAll: privateProcedure.query(async ({ ctx }) => {
     const userId = ctx.userId;
-    return ctx.db.contact.findMany({
+    const contacts = await ctx.db.contact.findMany({
       where: {
         userId: userId,
       },
       select: {
+        id: true,
         name: true,
         affiliation: true,
         notes: true,
@@ -31,9 +32,9 @@ export const contactsRouter = createTRPCRouter({
         company: true,
         lastUpdated: true,
         Interactions: {
+          take: 1,
           select: {
             title: true,
-            location: true,
             date: true,
             Highlights: {
               select: {
@@ -47,8 +48,49 @@ export const contactsRouter = createTRPCRouter({
         },
       },
     });
+
+    const filteredContacts = contacts.map((c) => {
+      const { Interactions, ...rest } = c;
+
+      const intTitle = Interactions[0]?.title ?? null;
+      const intDate = Interactions[0]?.date ?? null;
+      const intHighlights = Interactions[0]?.Highlights ?? [];
+
+      const newContact = { ...rest, intTitle, intDate, intHighlights };
+      return newContact;
+    });
+    return filteredContacts;
   }),
-  newContact: privateProcedure
+  getInteractions: privateProcedure
+    .input(
+      z.object({
+        contactId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      if (!input.contactId) return;
+      return ctx.db.interactions.findMany({
+        where: {
+          contactId: input.contactId,
+        },
+        select: {
+          id: true,
+          title: true,
+          location: true,
+          date: true,
+          Highlights: {
+            select: {
+              highlight: true,
+              id: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "desc",
+        },
+      });
+    }),
+  new: privateProcedure
     .input(
       z.object({
         name: z.string().min(1),

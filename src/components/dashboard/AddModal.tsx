@@ -11,7 +11,6 @@ interface NewContactFormData {
 }
 
 export const AddModal = (props: {
-  addModal: boolean;
   setAddModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [formData, setFormData] = useState<NewContactFormData>({
@@ -24,8 +23,9 @@ export const AddModal = (props: {
   const [formErrors, setFormErrors] = useState<Partial<NewContactFormData>>({});
 
   const ctx = api.useUtils();
+  const { setAddModal } = props;
 
-  const { mutate, isPending } = api.contacts.newContact.useMutation({
+  const { mutate, isPending } = api.contacts.new.useMutation({
     onSuccess: () => {
       toast.success(`Successfully added ${formData.name} as a contact!`);
       setFormData({
@@ -36,7 +36,7 @@ export const AddModal = (props: {
         notes: "",
       });
       void ctx.contacts.getAll.invalidate();
-      props.setAddModal(false);
+      setAddModal(false);
     },
     onError: () => {
       toast.error("Failed to add new contact, please try again later!");
@@ -176,7 +176,7 @@ export const AddModal = (props: {
               <button
                 className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                 type="button"
-                onClick={() => props.setAddModal(false)}
+                onClick={() => setAddModal(false)}
               >
                 Close
               </button>
