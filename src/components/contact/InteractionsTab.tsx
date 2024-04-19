@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faSearch } from "@fortawesome/free-solid-svg-icons";
 import type { ContactObj, Interaction } from "contact";
 import { DateTime } from "luxon";
+// import { ViewInteractionModal } from "./InteractionModal";
 import { InteractionModal } from "./InteractionModal";
 
 export const InteractionsTab = (props: { contactObj: ContactObj }) => {
-  const [interactionModal, setInteractionModal] = useState<null | number>(0);
+  const [activeInteraction, setActiveInteraction] =
+    useState<null | Interaction>(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [sortDesc, setSortDesc] = useState<boolean>(true);
   const [filter, setFilter] = useState<string>("");
 
@@ -28,7 +31,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
       return at - bt;
     });
 
-  const activeInteraction = interactions.find((i) => i.id === interactionModal);
+  // const activeInteraction = interactions.find((i) => i.id === interactionModal);
 
   const InteractionBox = (props: { interaction: Interaction }) => {
     const { interaction: i } = props;
@@ -38,7 +41,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
     return (
       <div
         className="mb-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3"
-        onClick={() => setInteractionModal(i.id)}
+        onClick={() => setActiveInteraction(i)}
       >
         <div className="w-4/5">
           <p className="py-2 font-semibold">
@@ -60,16 +63,18 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
 
   return (
     <>
-      {activeInteraction ? (
+      {activeInteraction || editMode ? (
         <InteractionModal
+          editMode={editMode}
+          setEditMode={setEditMode}
           interaction={activeInteraction}
-          setInteractionModal={setInteractionModal}
+          setInteraction={setActiveInteraction}
         />
       ) : null}
       <div className="flex justify-between">
         <p className="pb-2 text-lg font-semibold">Interactions</p>
 
-        <p className="text-sm text-[#8099a7]">
+        <p className="text-sm text-[#8099a7]" onClick={() => setEditMode(true)}>
           Total Interactions: {filteredInteractions.length}
         </p>
       </div>
