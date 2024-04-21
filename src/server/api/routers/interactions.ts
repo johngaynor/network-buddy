@@ -76,20 +76,72 @@ export const interactionsRouter = createTRPCRouter({
 
       return interaction;
     }),
-  // updateAffiliation: publicProcedure.query(({ ctx }) => {
-  //   return ctx.db.contact.update({
-  //     where: {
-  //       userId: 'hello',
-  //     },
-  //     data: {
-  //       Affiliation: {
-  //         create: {
-  //           data: {},
-  //         },
-  //       },
-  //     },
-  //   });
-  // }),
+  edit: privateProcedure
+    .input(
+      z.object({
+        interactionId: z.number(),
+        title: z.string().min(1),
+        location: z.string().min(1),
+        date: z.date(),
+        Highlights: z.array(
+          z.object({ highlight: z.string(), id: z.number().optional() }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+
+      const { success } = await ratelimit.limit(userId);
+
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+
+      const { interactionId, title, location, date, Highlights } = input;
+
+      const deletePromises = Highlights.filter(
+        (h) => h.id && h.highlight === "",
+      ).map(
+        async (h) => await ctx.db.highlights.delete({ where: { id: h.id } }),
+      );
+
+      const updatePromises = Highlights.filter(
+        (h) => h.highlight !== "" && h.id,
+      ).map(
+        async (h) =>
+          await ctx.db.highlights.update({
+            where: { id: h.id },
+            data: { highlight: h.highlight },
+          }),
+      );
+
+      const createPromises = Highlights.filter(
+        (h) => !h.id && h.highlight !== "",
+      ).map(
+        async (h) =>
+          await ctx.db.highlights.create({
+            data: {
+              interactionId,
+              highlight: h.highlight,
+            },
+          }),
+      );
+
+      await Promise.all([
+        ...deletePromises,
+        ...updatePromises,
+        ...createPromises,
+      ]);
+
+      const interaction = await ctx.db.interactions.update({
+        where: { id: interactionId },
+        data: {
+          title,
+          location,
+          date,
+        },
+      });
+
+      return interaction;
+    }),
 });
 
 // if there are no results, it will return an empty array

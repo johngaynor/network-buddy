@@ -61,10 +61,31 @@ export const EditInteractionModal = (props: {
           location: "",
           Highlights: [],
         });
-        void ctx.interactions.getByContact.invalidate(); // may need to invalidate contact as well to get most recent interaction
+        void ctx.interactions.getByContact.invalidate();
+        void ctx.contacts.getAll.invalidate();
       },
       onError: () => {
         toast.error("Failed to add interaction, please try again later!");
+      },
+    });
+
+  const { mutate: editMutate, isPending: editPending } =
+    api.interactions.edit.useMutation({
+      onSuccess: () => {
+        props.setEditMode(false);
+        props.setInteraction(null);
+        toast.success(`Successfully edited interaction!`);
+        setFormData({
+          date: new Date(),
+          title: "",
+          location: "",
+          Highlights: [],
+        });
+        void ctx.interactions.getByContact.invalidate();
+        void ctx.contacts.getAll.invalidate();
+      },
+      onError: () => {
+        toast.error("Failed to edit interaction, please try again later!");
       },
     });
 
@@ -80,7 +101,7 @@ export const EditInteractionModal = (props: {
       if (!props.interaction.id) {
         newMutate({ ...formData, contactId: props.contactId });
       } else {
-        // edit
+        editMutate({ ...formData, interactionId: props.interaction.id });
       }
       setFormData({
         date: new Date(),
@@ -95,7 +116,7 @@ export const EditInteractionModal = (props: {
 
   return (
     <Modal title={formData.id ? "Edit Interaction" : "New Interaction"}>
-      {newPending ? <LoadingSpinner size={20} /> : null}
+      {newPending || editPending ? <LoadingSpinner size={20} /> : null}
 
       <div className="flex flex-col p-6">
         <div
@@ -227,7 +248,7 @@ export const EditInteractionModal = (props: {
           className="mb-1 mr-1 rounded bg-site-blue-r px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
           type="button"
           onClick={handleSubmit}
-          disabled={newPending}
+          disabled={newPending || editPending}
         >
           Submit
         </button>
@@ -247,8 +268,6 @@ export const ViewInteractionModal = (props: {
   } = props;
 
   const formattedDate = DateTime.fromJSDate(date).toFormat("MMMM dd, yyyy");
-
-  console.log(Highlights);
 
   if (!id) {
     toast.error("There is no interaction with this ID...");
@@ -337,25 +356,3 @@ export const InteractionModal = (props: {
       />
     );
 };
-
-// submission stuff
-// const ctx = api.useUtils();
-// const { setAddModal } = props;
-
-// const { mutate, isPending } = api.contacts.new.useMutation({
-//   onSuccess: () => {
-//     toast.success(`Successfully added ${formData.name} as a contact!`);
-//     setFormData({
-//       name: "",
-//       affiliation: "",
-//       position: "",
-//       company: "",
-//       notes: "",
-//     });
-//     void ctx.contacts.getAll.invalidate();
-//     setAddModal(false);
-//   },
-//   onError: () => {
-//     toast.error("Failed to add new contact, please try again later!");
-//   },
-// });
