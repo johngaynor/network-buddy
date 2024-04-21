@@ -6,6 +6,7 @@ import type { Interaction, Highlight } from "contact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { api } from "~/utils/api";
+import { LoadingSpinner } from "../loading";
 
 export interface InteractionFormData {
   id?: number; // id will be used to determine if it's an edit or a new interaction
@@ -52,6 +53,7 @@ export const EditInteractionModal = (props: {
   const { mutate: newMutate, isPending: newPending } =
     api.interactions.new.useMutation({
       onSuccess: () => {
+        props.setEditMode(false);
         toast.success(`Successfully added new interaction!`);
         setFormData({
           date: new Date(),
@@ -60,7 +62,6 @@ export const EditInteractionModal = (props: {
           Highlights: [],
         });
         void ctx.interactions.getByContact.invalidate(); // may need to invalidate contact as well to get most recent interaction
-        props.setEditMode(false);
       },
       onError: () => {
         toast.error("Failed to add interaction, please try again later!");
@@ -94,7 +95,9 @@ export const EditInteractionModal = (props: {
 
   return (
     <Modal title={formData.id ? "Edit Interaction" : "New Interaction"}>
-      <div className="relative flex flex-col p-6">
+      {newPending ? <LoadingSpinner size={20} /> : null}
+
+      <div className="flex flex-col p-6">
         <div
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
         >
@@ -152,6 +155,7 @@ export const EditInteractionModal = (props: {
         <div
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
         >
+          {/* There is a bug here... after entering the first letter, it loses focus because it is removing one input and switching in another */}
           <div className="flex w-full flex-col">
             <label>Highlights</label>
             {formData.Highlights.map((h, i) => (
