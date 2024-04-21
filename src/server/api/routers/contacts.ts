@@ -92,6 +92,21 @@ export const contactsRouter = createTRPCRouter({
 
       return contact;
     }),
+  delete: privateProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+
+      const { success } = await ratelimit.limit(userId);
+
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+
+      const result = await ctx.db.contact.delete({
+        where: { id: input.id },
+      });
+
+      return result;
+    }),
 });
 
 // if there are no results, it will return an empty array

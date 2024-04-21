@@ -27,7 +27,7 @@ model Interactions {
   title      String
   location   String
   date       DateTime
-  contact    Contact      @relation(fields: [contactId], references: [id])
+  contact    Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade)
   Highlights Highlights[]
 }
 
@@ -35,5 +35,5 @@ model Highlights {
   id            Int          @id @default(autoincrement())
   interactionId Int
   highlight     String
-  interaction   Interactions @relation(fields: [interactionId], references: [id])
+  interaction   Interactions @relation(fields: [interactionId], references: [id], onDelete: Cascade)
 }

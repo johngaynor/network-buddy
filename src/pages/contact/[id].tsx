@@ -13,7 +13,8 @@ import { HistoryTab } from "~/components/contact/HistoryTab";
 import { OpportunitiesTab } from "~/components/contact/OpportunitiesTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
-  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(1);
+  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(0);
+  const router = useRouter();
   const ProfileSectionTab = (props: {
     title: string;
     index: 0 | 1 | 2 | 3;
@@ -39,7 +40,28 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const { intTitle, intDate, intHighlights, ...rest } = contact;
   const contactObj: ContactObj = { ...rest, interactions: data ?? [] };
 
-  if (isLoading || !data) {
+  const ctx = api.useUtils();
+
+  const { mutate, isPending } = api.contacts.delete.useMutation({
+    onSuccess: () => {
+      toast.success(`Successfully deleted contact!`);
+      void ctx.contacts.getAll.invalidate();
+      router.push("/");
+    },
+    onError: (err) => {
+      toast.error("Failed to delete contact, please try again later!");
+      console.log(err);
+    },
+  });
+
+  const handleDeleteContact = () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this contact? This action cannot be undone.",
+    );
+    if (confirm) mutate({ id: contactId });
+  };
+
+  if (isLoading || !data || isPending) {
     return <ContactLoadingPage />;
   }
 
@@ -56,6 +78,12 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
           <ProfileSectionTab title="Interactions" index={1} />
           <ProfileSectionTab title="History" index={2} />
           <ProfileSectionTab title="Opportunities" index={3} />
+          <p
+            className="text-md mt-10 w-fit rounded-full px-4 py-2 text-red-500 transition delay-100 ease-in-out hover:bg-red-500 hover:text-white"
+            onClick={handleDeleteContact}
+          >
+            Delete Contact
+          </p>
         </div>
         <div className="w-full pl-6">
           {activeTab === 0 ? <ProfileTab contactObj={contactObj} /> : null}
