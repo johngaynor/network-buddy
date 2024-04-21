@@ -61,35 +61,6 @@ export const contactsRouter = createTRPCRouter({
     });
     return filteredContacts;
   }),
-  getInteractions: privateProcedure
-    .input(
-      z.object({
-        contactId: z.number(),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      if (!input.contactId) return;
-      return ctx.db.interactions.findMany({
-        where: {
-          contactId: input.contactId,
-        },
-        select: {
-          id: true,
-          title: true,
-          location: true,
-          date: true,
-          Highlights: {
-            select: {
-              highlight: true,
-              id: true,
-            },
-          },
-        },
-        orderBy: {
-          date: "desc",
-        },
-      });
-    }),
   new: privateProcedure
     .input(
       z.object({
@@ -121,20 +92,6 @@ export const contactsRouter = createTRPCRouter({
 
       return contact;
     }),
-  // updateAffiliation: publicProcedure.query(({ ctx }) => {
-  //   return ctx.db.contact.update({
-  //     where: {
-  //       userId: 'hello',
-  //     },
-  //     data: {
-  //       Affiliation: {
-  //         create: {
-  //           data: {},
-  //         },
-  //       },
-  //     },
-  //   });
-  // }),
 });
 
 // if there are no results, it will return an empty array

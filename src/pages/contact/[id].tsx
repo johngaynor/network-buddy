@@ -30,7 +30,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   };
 
   const { contactId, contact } = props;
-  const { data, isLoading, error } = api.contacts.getInteractions.useQuery({
+  const { data, isLoading, error } = api.interactions.getByContact.useQuery({
     contactId,
   });
 

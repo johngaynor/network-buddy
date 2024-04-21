@@ -69,6 +69,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
           setEditMode={setEditMode}
           interaction={activeInteraction}
           setInteraction={setActiveInteraction}
+          contactId={props.contactObj.id}
         />
       ) : null}
       <div className="flex justify-between">

@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import type { Interaction, Highlight } from "contact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { api } from "~/utils/api";
 
 export interface InteractionFormData {
   id?: number; // id will be used to determine if it's an edit or a new interaction
@@ -37,6 +38,7 @@ export const EditInteractionModal = (props: {
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   setInteraction: Dispatch<SetStateAction<Interaction | null>>;
+  contactId: number;
 }) => {
   const [formData, setFormData] = useState<InteractionFormData | Interaction>(
     props.interaction,
@@ -44,6 +46,26 @@ export const EditInteractionModal = (props: {
   const [formErrors, setFormErrors] = useState<Partial<InteractionFormData>>(
     {},
   );
+
+  const ctx = api.useUtils();
+
+  const { mutate: newMutate, isPending: newPending } =
+    api.interactions.new.useMutation({
+      onSuccess: () => {
+        toast.success(`Successfully added new interaction!`);
+        setFormData({
+          date: new Date(),
+          title: "",
+          location: "",
+          Highlights: [],
+        });
+        void ctx.interactions.getByContact.invalidate(); // may need to invalidate contact as well to get most recent interaction
+        props.setEditMode(false);
+      },
+      onError: () => {
+        toast.error("Failed to add interaction, please try again later!");
+      },
+    });
 
   const handleSubmit = () => {
     const errors: Partial<InteractionFormData> = {};
@@ -54,9 +76,17 @@ export const EditInteractionModal = (props: {
       errors.location = "The location field cannot be empty.";
 
     if (!Object.keys(errors).length) {
-      console.log(formData.Highlights);
-      // mutate(formData);
-      // handle the case when submission is good, separate based on create/edit
+      if (!props.interaction.id) {
+        newMutate({ ...formData, contactId: props.contactId });
+      } else {
+        // edit
+      }
+      setFormData({
+        date: new Date(),
+        title: "",
+        location: "",
+        Highlights: [],
+      }); // clear out values
     } else {
       setFormErrors(errors);
     }
@@ -193,6 +223,7 @@ export const EditInteractionModal = (props: {
           className="mb-1 mr-1 rounded bg-site-blue-r px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
           type="button"
           onClick={handleSubmit}
+          disabled={newPending}
         >
           Submit
         </button>
@@ -271,8 +302,10 @@ export const InteractionModal = (props: {
   setInteraction: Dispatch<SetStateAction<Interaction | null>>;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
+  contactId: number;
 }) => {
-  const { interaction, setInteraction, editMode, setEditMode } = props;
+  const { interaction, setInteraction, editMode, setEditMode, contactId } =
+    props;
 
   const emptyFormData: InteractionFormData = {
     date: new Date(),
@@ -288,6 +321,7 @@ export const InteractionModal = (props: {
         editMode={editMode}
         setInteraction={setInteraction}
         setEditMode={setEditMode}
+        contactId={contactId}
       />
     );
   } else
