@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { DateTime } from "luxon";
 import type { Interaction, Highlight } from "contact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "../loading";
 
@@ -114,6 +114,20 @@ export const EditInteractionModal = (props: {
     }
   };
 
+  const handleDelete = (i: number) => {
+    const highlights = [...formData.Highlights];
+
+    if (highlights[i]) {
+      if (!highlights[i]!.id) {
+        highlights.splice(i, 1);
+      } else if (!highlights[i]!.isDeleted) {
+        highlights[i]!.isDeleted = true;
+      }
+    }
+
+    setFormData({ ...formData, Highlights: highlights });
+  };
+
   return (
     <Modal title={formData.id ? "Edit Interaction" : "New Interaction"}>
       {newPending || editPending ? <LoadingSpinner size={20} /> : null}
@@ -175,44 +189,69 @@ export const EditInteractionModal = (props: {
         <div
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
         >
-          {/* There is a bug here... after entering the first letter, it loses focus because it is removing one input and switching in another */}
           <div className="flex w-full flex-col">
             <label>Highlights</label>
-            {formData.Highlights.map((h, i) => (
-              <input
-                key={i}
-                className="mt-2 rounded-lg border-2 p-2"
-                placeholder="Highlight..."
-                id={`highlight-${i}`}
-                required
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    Highlights: formData.Highlights.map((h, index) =>
-                      index === i ? { ...h, highlight: e.target.value } : h,
-                    ),
-                  })
-                }
-                value={h.highlight}
-              />
-            ))}
+            {formData.Highlights.map((h, i) => {
+              if (!h.isDeleted)
+                return (
+                  <div className="flex" key={i}>
+                    <input
+                      className={`mt-2 w-full rounded-lg border-2 p-2 ${h.isDeleted ? "bg-red-100 text-gray-300" : null}`}
+                      placeholder="Highlight..."
+                      id={`highlight-${i}`}
+                      required
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          Highlights: formData.Highlights.map((h, index) =>
+                            index === i
+                              ? { ...h, highlight: e.target.value }
+                              : h,
+                          ),
+                        })
+                      }
+                      value={h.highlight}
+                      disabled={h.isDeleted}
+                    />
+                    <div
+                      className="mt-2 flex w-12 items-center justify-evenly rounded-md bg-red-100 p-2 text-red-500 transition ease-in-out hover:bg-red-500 hover:text-white"
+                      onClick={() => handleDelete(i)}
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ height: "15px", width: "15px" }}
+                      />
+                    </div>
+                  </div>
+                );
+              return null;
+            })}
+            {/* There is a bug here... after entering the first letter, it loses focus because it is removing one input and switching in another */}
             {!formData.Highlights.length ? (
-              <input
-                className="mt-2 rounded-lg border-2 p-2"
-                placeholder="Highlight..."
-                id={`highlight-default`}
-                required
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    Highlights: [
-                      ...formData.Highlights,
-                      { highlight: e.target.value },
-                    ],
-                  })
-                }
-                value={formData.Highlights[0]?.highlight}
-              />
+              <div className="flex">
+                <input
+                  className="mt-2 w-full rounded-lg border-2 p-2"
+                  placeholder="Highlight..."
+                  id={`highlight-default`}
+                  required
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      Highlights: [
+                        ...formData.Highlights,
+                        { highlight: e.target.value },
+                      ],
+                    })
+                  }
+                  value={formData.Highlights[0]?.highlight}
+                />
+                <div className="mt-2 flex w-12 items-center justify-evenly rounded-md bg-red-100 p-2 text-red-500 transition ease-in-out hover:bg-red-500 hover:text-white">
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{ height: "15px", width: "15px" }}
+                  />
+                </div>
+              </div>
             ) : null}
             <div
               className="mt-2 flex h-8 w-8 items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
@@ -317,6 +356,9 @@ export const ViewInteractionModal = (props: {
                   </p>
                 );
               })}
+              {!Highlights.length ? (
+                <p className="mt-1 text-xl font-semibold">--</p>
+              ) : null}
             </div>
           </div>
         </div>

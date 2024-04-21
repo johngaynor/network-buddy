@@ -50,7 +50,6 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
     },
     onError: (err) => {
       toast.error("Failed to delete contact, please try again later!");
-      console.log(err);
     },
   });
 

@@ -84,7 +84,11 @@ export const interactionsRouter = createTRPCRouter({
         location: z.string().min(1),
         date: z.date(),
         Highlights: z.array(
-          z.object({ highlight: z.string(), id: z.number().optional() }),
+          z.object({
+            highlight: z.string(),
+            id: z.number().optional(),
+            isDeleted: z.boolean().optional(),
+          }),
         ),
       }),
     )
@@ -98,13 +102,13 @@ export const interactionsRouter = createTRPCRouter({
       const { interactionId, title, location, date, Highlights } = input;
 
       const deletePromises = Highlights.filter(
-        (h) => h.id && h.highlight === "",
+        (h) => h.id && (h.highlight === "" || h.isDeleted),
       ).map(
         async (h) => await ctx.db.highlights.delete({ where: { id: h.id } }),
       );
 
       const updatePromises = Highlights.filter(
-        (h) => h.highlight !== "" && h.id,
+        (h) => h.highlight !== "" && h.id && !h.isDeleted,
       ).map(
         async (h) =>
           await ctx.db.highlights.update({

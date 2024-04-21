@@ -1,5 +1,7 @@
 export type Highlight = {
   highlight: string;
+  isDeleted?: boolean;
+  id?: number;
 };
 
 export type Interaction = {
