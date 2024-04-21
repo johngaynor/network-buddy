@@ -2,14 +2,16 @@ import { type Dispatch, type SetStateAction, type ReactNode } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { DateTime } from "luxon";
-import type { Interaction } from "contact";
+import type { Interaction, Highlight } from "contact";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export interface InteractionFormData {
   id?: number; // id will be used to determine if it's an edit or a new interaction
   date: Date;
   title: string;
   location: string;
-  Highlights: string[];
+  Highlights: Highlight[];
 }
 
 export const Modal = (props: { children: ReactNode; title: string }) => {
@@ -52,6 +54,7 @@ export const EditInteractionModal = (props: {
       errors.location = "The location field cannot be empty.";
 
     if (!Object.keys(errors).length) {
+      console.log(formData.Highlights);
       // mutate(formData);
       // handle the case when submission is good, separate based on create/edit
     } else {
@@ -81,9 +84,6 @@ export const EditInteractionModal = (props: {
               }
               value={DateTime.fromJSDate(formData.date).toISODate() ?? ""}
             />
-            {formErrors.title ? (
-              <p className="text-red-500">{formErrors.title}</p>
-            ) : null}
           </div>
           <div className="flex w-1/3 flex-col pr-3">
             <label>Title</label>
@@ -124,45 +124,57 @@ export const EditInteractionModal = (props: {
         >
           <div className="flex w-full flex-col">
             <label>Highlights</label>
-            <input
-              className="mt-2 rounded-lg border-2 p-2"
-              placeholder="Highlight..."
-              id="title"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              value={formData.title}
-            />
-            {formErrors.title ? (
-              <p className="text-red-500">{formErrors.title}</p>
+            {formData.Highlights.map((h, i) => (
+              <input
+                key={i}
+                className="mt-2 rounded-lg border-2 p-2"
+                placeholder="Highlight..."
+                id={`highlight-${i}`}
+                required
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    Highlights: formData.Highlights.map((h, index) =>
+                      index === i ? { ...h, highlight: e.target.value } : h,
+                    ),
+                  })
+                }
+                value={h.highlight}
+              />
+            ))}
+            {!formData.Highlights.length ? (
+              <input
+                className="mt-2 rounded-lg border-2 p-2"
+                placeholder="Highlight..."
+                id={`highlight-default`}
+                required
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    Highlights: [
+                      ...formData.Highlights,
+                      { highlight: e.target.value },
+                    ],
+                  })
+                }
+                value={formData.Highlights[0]?.highlight}
+              />
             ) : null}
-            <input
-              className="mt-2 rounded-lg border-2 p-2"
-              placeholder="Highlight..."
-              id="title"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
+
+            <div
+              className="mt-2 flex h-8 w-8 items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
+              onClick={() =>
+                setFormData({
+                  ...formData,
+                  Highlights: [...formData.Highlights, { highlight: "" }],
+                })
               }
-              value={formData.title}
-            />
-            {formErrors.title ? (
-              <p className="text-red-500">{formErrors.title}</p>
-            ) : null}
-            <input
-              className="mt-2 rounded-lg border-2 p-2"
-              placeholder="Highlight..."
-              id="title"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              value={formData.title}
-            />
-            {formErrors.title ? (
-              <p className="text-red-500">{formErrors.title}</p>
-            ) : null}
+            >
+              <FontAwesomeIcon
+                icon={faPlus}
+                style={{ height: "15px", width: "15px" }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -201,6 +213,8 @@ export const ViewInteractionModal = (props: {
 
   const formattedDate = DateTime.fromJSDate(date).toFormat("MMMM dd, yyyy");
 
+  console.log(Highlights);
+
   if (!id) {
     toast.error("There is no interaction with this ID...");
     return;
@@ -224,7 +238,7 @@ export const ViewInteractionModal = (props: {
               {Highlights.map((h, i) => {
                 return (
                   <p className="mt-1 text-xl font-semibold" key={i}>
-                    - test highlight
+                    {h.highlight}
                   </p>
                 );
               })}
