@@ -1,6 +1,7 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { api } from "~/utils/api";
+import { LoadingSpinner } from "../loading";
 
 interface NewContactFormData {
   name: string;
@@ -68,13 +69,15 @@ export const AddModal = (props: {
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <div className="relative mx-auto my-6 w-1/2">
           {/*content*/}
-          <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+          <div className="flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+            {isPending ? <LoadingSpinner size={20} /> : null}
+
             {/*header*/}
             <div className="flex items-center justify-center rounded-t p-5">
               <h3 className="text-3xl">Add Contact</h3>
             </div>
             {/*body*/}
-            <div className="relative flex flex-col p-6">
+            <div className="flex flex-col p-6">
               {/* first row of inputs */}
               <div
                 className={`flex w-full flex-row ${formErrors.name ?? formErrors.affiliation ? "pb-2" : "pb-7"}`}
