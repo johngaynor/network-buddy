@@ -142,6 +142,29 @@ export const interactionsRouter = createTRPCRouter({
 
       return interaction;
     }),
+  delete: privateProcedure
+    .input(
+      z.object({
+        interactionId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+
+      const { success } = await ratelimit.limit(userId);
+
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+
+      const { interactionId } = input;
+
+      const highlights = await ctx.db.highlights.deleteMany({
+        where: { interactionId },
+      });
+
+      const interaction = await ctx.db.interactions.delete({
+        where: { id: interactionId },
+      });
+    }),
 });
 
 // if there are no results, it will return an empty array

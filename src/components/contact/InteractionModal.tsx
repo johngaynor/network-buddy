@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { DateTime } from "luxon";
 import type { Interaction, Highlight } from "contact";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "../loading";
 
@@ -117,7 +117,6 @@ export const EditInteractionModal = (props: {
   return (
     <Modal title={formData.id ? "Edit Interaction" : "New Interaction"}>
       {newPending || editPending ? <LoadingSpinner size={20} /> : null}
-
       <div className="flex flex-col p-6">
         <div
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
@@ -215,7 +214,6 @@ export const EditInteractionModal = (props: {
                 value={formData.Highlights[0]?.highlight}
               />
             ) : null}
-
             <div
               className="mt-2 flex h-8 w-8 items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
               onClick={() =>
@@ -274,10 +272,33 @@ export const ViewInteractionModal = (props: {
     return;
   }
 
+  const ctx = api.useUtils();
+
+  const { mutate, isPending } = api.interactions.delete.useMutation({
+    onSuccess: () => {
+      props.setInteraction(null);
+      toast.success(`Successfully deleted interaction!`);
+      void ctx.interactions.getByContact.invalidate();
+      void ctx.contacts.getAll.invalidate();
+    },
+    onError: () => {
+      toast.error("Failed to delete interaction, please try again later!");
+    },
+  });
+
+  const handleDelete = () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this interaction? This action cannot be undone.",
+    );
+
+    if (confirm) mutate({ interactionId: id });
+  };
+
   return (
     <Modal title={formattedDate}>
-      <div className="relative flex flex-col p-6">
-        <div className="relative flex flex-col p-6">
+      {isPending ? <LoadingSpinner size={20} /> : null}
+      <div className="flex flex-col p-6">
+        <div className="flex flex-col p-6">
           <div className="flex w-full flex-row pb-4">
             <div className="flex flex-col">
               <label>Title</label>
@@ -300,21 +321,34 @@ export const ViewInteractionModal = (props: {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end rounded-b p-6">
-        <button
-          className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
-          type="button"
-          onClick={() => props.setInteraction(null)}
-        >
-          Close
-        </button>
-        <button
-          className="mb-1 mr-1 rounded bg-site-blue-r px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
-          type="button"
-          onClick={() => props.setEditMode(true)}
-        >
-          Edit
-        </button>
+      <div className="flex items-center justify-between rounded-b p-6">
+        <div>
+          <div
+            className="mb-1 mr-1 flex rounded bg-red-500 px-3 py-3 text-sm uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+            onClick={handleDelete}
+          >
+            <FontAwesomeIcon
+              icon={faTrashCan}
+              style={{ height: "18px", width: "18px" }}
+            />
+          </div>
+        </div>
+        <div>
+          <button
+            className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
+            type="button"
+            onClick={() => props.setInteraction(null)}
+          >
+            Close
+          </button>
+          <button
+            className="mb-1 mr-1 rounded bg-site-blue-r px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
+            type="button"
+            onClick={() => props.setEditMode(true)}
+          >
+            Edit
+          </button>
+        </div>
       </div>
     </Modal>
   );
