@@ -49,7 +49,7 @@ export const interactionsRouter = createTRPCRouter({
         title: z.string().min(1),
         location: z.string().min(1),
         date: z.date(),
-        Highlights: z.array(z.any()),
+        Highlights: z.array(z.object({ highlight: z.string() })),
       }),
     )
     .mutation(async ({ ctx, input }) => {
