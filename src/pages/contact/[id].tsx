@@ -43,10 +43,10 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const ctx = api.useUtils();
 
   const { mutate, isPending } = api.contacts.delete.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(`Successfully deleted contact!`);
       void ctx.contacts.getAll.invalidate();
-      router.push("/");
+      await router.push("/");
     },
     onError: (err) => {
       toast.error("Failed to delete contact, please try again later!");
