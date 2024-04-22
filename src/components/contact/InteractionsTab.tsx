@@ -62,7 +62,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
   };
 
   return (
-    <>
+    <div className="pb-6">
       {activeInteraction ?? editMode ? (
         <InteractionModal
           editMode={editMode}
@@ -111,7 +111,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
       {filteredInteractions.map((i, index) => (
         <InteractionBox key={index} interaction={i} />
       ))}
-    </>
+    </div>
   );
 };
 

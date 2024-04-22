@@ -71,7 +71,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
           <p className="text-3xl text-site-purple-r">Contact</p>
         </div>
       </div>
-      <div className="flex h-full w-full flex-row rounded-lg bg-white p-4">
+      <div className="flex h-full w-full flex-row overflow-hidden rounded-lg bg-white p-4">
         <div className="flex w-48 flex-col border-r-2">
           <ProfileSectionTab title="Profile" index={0} />
           <ProfileSectionTab title="Interactions" index={1} />
@@ -84,7 +84,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
             Delete Contact
           </p>
         </div>
-        <div className="w-full pl-6">
+        <div className="w-full overflow-y-auto px-6">
           {activeTab === 0 ? <ProfileTab contactObj={contactObj} /> : null}
           {activeTab === 1 ? <InteractionsTab contactObj={contactObj} /> : null}
           {activeTab === 2 ? <HistoryTab /> : null}
