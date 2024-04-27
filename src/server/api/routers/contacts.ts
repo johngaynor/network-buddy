@@ -89,7 +89,6 @@ export const contactsRouter = createTRPCRouter({
           lastUpdated: new Date(),
         },
       });
-
       return contact;
     }),
   delete: privateProcedure

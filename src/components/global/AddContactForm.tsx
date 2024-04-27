@@ -2,6 +2,7 @@ import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 import { Modal } from "./Modal";
+import { useRouter } from "next/navigation";
 
 interface NewContactFormData {
   name: string;
@@ -25,10 +26,11 @@ export const AddContactForm = (props: {
   const [formErrors, setFormErrors] = useState<Partial<NewContactFormData>>({});
 
   const ctx = api.useUtils();
+  const router = useRouter();
   const { setAddModal, isModal } = props;
 
   const { mutate, isPending } = api.contacts.new.useMutation({
-    onSuccess: () => {
+    onSuccess: (contact) => {
       toast.success(`Successfully added ${formData.name} as a contact!`);
       setFormData({
         name: "",
@@ -39,6 +41,7 @@ export const AddContactForm = (props: {
       });
       void ctx.contacts.getAll.invalidate();
       if (isModal && setAddModal) setAddModal(false);
+      if (!isModal && !setAddModal) router.push(`/contact/${contact.id}`);
     },
     onError: () => {
       toast.error("Failed to add new contact, please try again later!");
@@ -167,13 +170,16 @@ export const AddContactForm = (props: {
       </div>
       {/*footer*/}
       <div className="flex items-center justify-end rounded-b p-6">
-        <button
-          className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
-          type="button"
-          onClick={() => (isModal && setAddModal ? setAddModal(false) : null)}
-        >
-          Close
-        </button>
+        {isModal && setAddModal ? (
+          <button
+            className="background-transparent mb-1 mr-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
+            type="button"
+            onClick={() => setAddModal(false)}
+          >
+            Close
+          </button>
+        ) : null}
+
         <button
           className="mb-1 mr-1 rounded bg-site-blue-r px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
           type="button"
