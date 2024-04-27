@@ -3,12 +3,14 @@ import { type ReactNode, useEffect, useState } from "react";
 import {
   type IconDefinition,
   faHouse,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faMagnifyingGlass,
   faCaretDown,
+  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { Inter } from "next/font/google";
 import { api } from "~/utils/api";
@@ -42,16 +44,32 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (contactsError)
     toast.error("Error retrieving contacts, please try again later!");
 
-  const NavIcon = (props: { icon: IconDefinition; openOnClick?: boolean }) => {
+  const NavIcon = (props: {
+    icon: IconDefinition;
+    openOnClick?: boolean;
+    title: string;
+    link?: string;
+  }) => {
     return (
       <div
-        className="flex h-14 w-14 items-center justify-center text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r"
-        onClick={() => (props.openOnClick ? setNavOpen(!navOpen) : null)}
+        className={`flex h-14 items-center text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r
+        ${navOpen ? "" : "w-56"} ${props.openOnClick ? "rounded-tl-xl" : ""}
+        `}
+        onClick={() =>
+          props.openOnClick
+            ? setNavOpen(!navOpen)
+            : props.link
+              ? router.push(props.link)
+              : null
+        }
       >
-        <FontAwesomeIcon
-          icon={props.icon}
-          style={{ height: "20px", width: "20px" }}
-        />
+        <div className="absolute flex h-14 w-14 items-center justify-center">
+          <FontAwesomeIcon
+            icon={props.icon}
+            style={{ height: "20px", width: "20px" }}
+          />
+        </div>
+        {navOpen && <p className="pl-14">{props.title}</p>}
       </div>
     );
   };
@@ -67,14 +85,19 @@ export default function Layout({ children }: { children: ReactNode }) {
         className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-5 font-sans ${inter.variable}`}
       >
         <div className="flex h-full w-full flex-row rounded-lg bg-white">
-          {/* <div className="flex w-14 flex-col items-center"> */}
           <div
-            className={`flex flex-col items-center transition delay-100 ease-in-out ${navOpen ? "w-56" : "w-14"}`}
+            className={`flex flex-col transition-all delay-100 ease-in-out ${navOpen ? "w-56" : "w-14"}`}
           >
-            <NavIcon icon={faBars} openOnClick={true} />
+            <NavIcon icon={faBars} openOnClick={true} title="Settings" />
+            <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
+            <NavIcon
+              icon={faUserPlus}
+              title="Add Contact"
+              link="/contact/new"
+            />
           </div>
           <div className="flex w-full flex-col">
-            <div className="flex h-14 w-full items-center rounded-lg bg-white px-6 text-[#8099a7]">
+            <div className="flex h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
               <div className="flex w-1/6 items-center">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
