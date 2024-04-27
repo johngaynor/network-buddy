@@ -64,7 +64,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
-        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-10 font-sans ${inter.variable}`}
+        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-5 font-sans ${inter.variable}`}
       >
         <div className="flex h-full w-full flex-row rounded-lg bg-white">
           {/* <div className="flex w-14 flex-col items-center"> */}

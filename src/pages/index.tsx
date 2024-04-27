@@ -121,7 +121,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
           {table.getRowModel().rows.map((row, i) => (
             <tr
               key={row.id + i}
-              className="h-12 rounded-xl border-y-8 border-gray-100 bg-white text-[#999]"
+              className="h-12 cursor-pointer rounded-xl border-y-8 border-gray-100 bg-white text-[#999] hover:bg-gray-200"
               onClick={() => setContactModal(row.original.id)}
             >
               {row.getVisibleCells().map((cell, i) => (
@@ -158,13 +158,13 @@ const HomePage: NextPage = () => {
           </p>
         </div>
         <div className="flex w-1/3 items-center justify-end">
-          <div className="hover:text-text-[#4ca8f6] flex h-10 w-10 items-center justify-center rounded-md bg-white text-[#8099a7] transition ease-in-out hover:bg-site-blue-l hover:text-[#4ca8f6]">
+          <div className="hover:text-text-[#4ca8f6] flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-white text-[#8099a7] transition ease-in-out hover:bg-site-blue-l hover:text-[#4ca8f6]">
             <FontAwesomeIcon
               icon={faBars}
               style={{ height: "20px", width: "20px" }}
             />
           </div>
-          <div className="mx-1 flex h-10 w-20 items-center justify-evenly rounded-md bg-white text-sm text-[#8099a7] transition ease-in-out hover:bg-[#ddf1fb] hover:text-[#4ca8f6]">
+          <div className="mx-1 flex h-10 w-20 cursor-pointer items-center justify-evenly rounded-md bg-white text-sm text-[#8099a7] transition ease-in-out hover:bg-[#ddf1fb] hover:text-[#4ca8f6]">
             <p>Filter</p>
             <FontAwesomeIcon
               icon={faFilter}
@@ -172,7 +172,7 @@ const HomePage: NextPage = () => {
             />
           </div>
           <div
-            className="flex h-10 w-36 items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white"
+            className="flex h-10 w-36 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white"
             onClick={() => setAddModal(!addModal)}
           >
             <FontAwesomeIcon
@@ -181,7 +181,7 @@ const HomePage: NextPage = () => {
             />
             <p>Add Contact</p>
           </div>
-          <div className="mx-1 flex h-10 w-10 items-center justify-center rounded-md bg-site-blue-l text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
+          <div className="mx-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-site-blue-l text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
             <FontAwesomeIcon
               icon={faEllipsis}
               style={{ height: "20px", width: "20px" }}
