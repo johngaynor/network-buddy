@@ -1,16 +1,16 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import { api } from "~/utils/api";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import type { Contact, ContactObj } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
-import { ProfileTab } from "~/components/contact/ProfileTab";
-import { InteractionsTab } from "~/components/contact/InteractionsTab";
-import { HistoryTab } from "~/components/contact/HistoryTab";
-import { OpportunitiesTab } from "~/components/contact/OpportunitiesTab";
+import { ProfileTab } from "~/components/contact/tabs/ProfileTab";
+import { InteractionsTab } from "~/components/contact/tabs/InteractionsTab";
+import { HistoryTab } from "~/components/contact/tabs/HistoryTab";
+import { OpportunitiesTab } from "~/components/contact/tabs/OpportunitiesTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(0);

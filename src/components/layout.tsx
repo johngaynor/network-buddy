@@ -52,8 +52,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   }) => {
     return (
       <div
-        className={`flex h-14 items-center text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r
-        ${navOpen ? "" : "w-56"} ${props.openOnClick ? "rounded-tl-xl" : ""}
+        className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out hover:bg-site-purple-l hover:text-site-purple-r
+        ${navOpen ? "w-56" : "w-14"} ${props.openOnClick ? "rounded-tl-xl" : ""}
         `}
         onClick={() =>
           props.openOnClick

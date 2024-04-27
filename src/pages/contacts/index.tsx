@@ -2,7 +2,7 @@ import { type Contact } from "contact";
 import { type NextPage } from "next";
 import { useState } from "react";
 import { ContactTableLoadingPage } from "~/components/loading";
-import { AddModal } from "~/components/dashboard/AddModal";
+import { AddContactForm } from "~/components/global/AddContactForm";
 import { useContactsLoading, useContacts } from "~/store/AppStore";
 import {
   createColumnHelper,
@@ -148,7 +148,9 @@ const HomePage: NextPage = () => {
 
   return (
     <>
-      {addModal ? <AddModal setAddModal={setAddModal} /> : null}
+      {addModal ? (
+        <AddContactForm setAddModal={setAddModal} isModal={true} />
+      ) : null}
       <div className="flex h-16 justify-between">
         <div className="flex w-1/3 items-center justify-between">
           <p className="text-3xl text-site-purple-r">Contacts</p>

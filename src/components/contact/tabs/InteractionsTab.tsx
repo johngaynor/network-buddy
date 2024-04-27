@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import type { ContactObj, Interaction } from "contact";
 import { DateTime } from "luxon";
-import { InteractionModal } from "./InteractionModal";
+import { InteractionModal } from "../InteractionModal";
 
 export const InteractionsTab = (props: { contactObj: ContactObj }) => {
   const [activeInteraction, setActiveInteraction] =
