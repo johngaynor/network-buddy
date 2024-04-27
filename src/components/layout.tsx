@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import {
   type IconDefinition,
   faHouse,
@@ -21,18 +21,8 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const NavIcon = ({ icon }: { icon: IconDefinition }) => {
-  return (
-    <div
-      className="flex h-14 w-14 items-center justify-center text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r"
-      onClick={() => alert("Sorry, this feature is not available yet...")}
-    >
-      <FontAwesomeIcon icon={icon} style={{ height: "20px", width: "20px" }} />
-    </div>
-  );
-};
-
 export default function Layout({ children }: { children: ReactNode }) {
+  const [navOpen, setNavOpen] = useState<boolean>(false);
   const setContacts = useSetContacts();
   const setContactsLoading = useSetContactsLoading();
   const router = useRouter();
@@ -52,6 +42,20 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (contactsError)
     toast.error("Error retrieving contacts, please try again later!");
 
+  const NavIcon = (props: { icon: IconDefinition; openOnClick?: boolean }) => {
+    return (
+      <div
+        className="flex h-14 w-14 items-center justify-center text-[#8099a7] transition delay-100 ease-in-out hover:bg-site-purple-l hover:text-site-purple-r"
+        onClick={() => (props.openOnClick ? setNavOpen(!navOpen) : null)}
+      >
+        <FontAwesomeIcon
+          icon={props.icon}
+          style={{ height: "20px", width: "20px" }}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
       <Head>
@@ -63,8 +67,11 @@ export default function Layout({ children }: { children: ReactNode }) {
         className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-10 font-sans ${inter.variable}`}
       >
         <div className="flex h-full w-full flex-row rounded-lg bg-white">
-          <div className="flex w-14 flex-col items-center">
-            <NavIcon icon={faBars} />
+          {/* <div className="flex w-14 flex-col items-center"> */}
+          <div
+            className={`flex flex-col items-center transition delay-100 ease-in-out ${navOpen ? "w-56" : "w-14"}`}
+          >
+            <NavIcon icon={faBars} openOnClick={true} />
           </div>
           <div className="flex w-full flex-col">
             <div className="flex h-14 w-full items-center rounded-lg bg-white px-6 text-[#8099a7]">

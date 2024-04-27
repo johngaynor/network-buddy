@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import type { ContactObj, Interaction } from "contact";
 import { DateTime } from "luxon";
-// import { ViewInteractionModal } from "./InteractionModal";
 import { InteractionModal } from "./InteractionModal";
 
 export const InteractionsTab = (props: { contactObj: ContactObj }) => {
@@ -18,11 +17,11 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
   } = props;
 
   const filteredInteractions = interactions
-    .filter(
-      (i) =>
-        i.location.toLowerCase().includes(filter.toLowerCase()) ||
-        i.title.toLowerCase().includes(filter.toLowerCase()),
-    )
+    .filter((i) => {
+      const intString =
+        i.title.toLowerCase() + " at " + i.location.toLowerCase();
+      return intString.includes(filter.toLowerCase());
+    })
     .sort((a, b) => {
       const at = a.date.getTime();
       const bt = b.date.getTime();
@@ -30,8 +29,6 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
       if (sortDesc) return bt - at;
       return at - bt;
     });
-
-  // const activeInteraction = interactions.find((i) => i.id === interactionModal);
 
   const InteractionBox = (props: { interaction: Interaction }) => {
     const { interaction: i } = props;
@@ -75,7 +72,7 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
       <div className="flex justify-between">
         <p className="pb-2 text-lg font-semibold">Interactions</p>
 
-        <p className="text-sm text-[#8099a7]" onClick={() => setEditMode(true)}>
+        <p className="text-sm text-[#8099a7]">
           Total Interactions: {filteredInteractions.length}
         </p>
       </div>
@@ -94,10 +91,18 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
+
+          <div
+            className="flex w-36 items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white"
+            onClick={() => setEditMode(true)}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ height: 20, width: 20 }} />
+            <p>Add Interaction</p>
+          </div>
         </div>
 
         <label className="inline-flex cursor-pointer items-center">
-          <span className="pr-2">Sort by Descending?</span>
+          <span className="pr-2">Sort by Most Recent?</span>
           <input
             type="checkbox"
             checked={sortDesc}
