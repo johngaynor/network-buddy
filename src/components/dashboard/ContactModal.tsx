@@ -44,26 +44,26 @@ export const ContactModal = (props: {
             <div className="relative flex flex-col p-6">
               <div className="flex w-full flex-row pb-4">
                 <div className="flex w-1/3 flex-col">
-                  <label>Affiliation</label>
-                  <p className="mt-1 text-xl font-semibold">{affiliation}</p>
+                  <label className="font-semibold">Affiliation</label>
+                  <p className="mt-1 text-xl">{affiliation}</p>
                 </div>
                 <div className="flex w-2/3 flex-col">
-                  <label>Occupation</label>
-                  <p className="mt-1 text-xl font-semibold">
+                  <label className="font-semibold">Occupation</label>
+                  <p className="mt-1 text-xl">
                     {position} at {company}
                   </p>
                 </div>
               </div>
               <div className="flex w-full flex-row pb-4">
                 <div className="flex w-full flex-col">
-                  <label>General Notes</label>
-                  <p className="mt-1 text-xl font-semibold">{notes}</p>
+                  <label className="font-semibold">General Notes</label>
+                  <p className="mt-1 text-xl">{notes}</p>
                 </div>
               </div>
               <div className="flex w-full flex-row pb-4">
                 <div className="flex w-1/3 flex-col">
-                  <label>Last Activity</label>
-                  <p className="mt-1 text-xl font-semibold">
+                  <label className="font-semibold">Last Activity</label>
+                  <p className="mt-1 text-xl">
                     {intTitle && intDate
                       ? intTitle +
                         " on " +
@@ -72,15 +72,15 @@ export const ContactModal = (props: {
                   </p>
                 </div>
                 <div className="flex w-2/3 flex-col">
-                  <label>Activity Highlights</label>
+                  <label className="font-semibold">Activity Highlights</label>
                   {intHighlights.length ? (
                     intHighlights.map((h, i) => (
-                      <p className="mt-1 text-xl font-semibold" key={i}>
+                      <p className="mt-1 text-xl" key={i}>
                         - {h.highlight}
                       </p>
                     ))
                   ) : (
-                    <p className="mt-1 text-xl font-semibold">--</p>
+                    <p className="mt-1 text-xl">--</p>
                   )}
                 </div>
               </div>

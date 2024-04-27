@@ -136,7 +136,7 @@ export const EditInteractionModal = (props: {
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
         >
           <div className="flex w-1/3 flex-col pr-3">
-            <label>Date</label>
+            <label className="font-semibold">Date</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
               placeholder="Select a date..."
@@ -153,7 +153,7 @@ export const EditInteractionModal = (props: {
             />
           </div>
           <div className="flex w-1/3 flex-col pr-3">
-            <label>Title</label>
+            <label className="font-semibold">Title</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
               placeholder="Coffee chat..."
@@ -169,7 +169,7 @@ export const EditInteractionModal = (props: {
             ) : null}
           </div>
           <div className="flex w-1/3 flex-col pl-3">
-            <label>Location</label>
+            <label className="font-semibold">Location</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
               placeholder="Starbucks"
@@ -190,7 +190,7 @@ export const EditInteractionModal = (props: {
           className={`flex w-full flex-row ${formErrors.title ?? formErrors.location ? "pb-2" : "pb-7"}`}
         >
           <div className="flex w-full flex-col">
-            <label>Highlights</label>
+            <label className="font-semibold">Highlights</label>
             {formData.Highlights.map((h, i) => {
               if (!h.isDeleted)
                 return (
@@ -340,25 +340,23 @@ export const ViewInteractionModal = (props: {
         <div className="flex flex-col p-6">
           <div className="flex w-full flex-row pb-4">
             <div className="flex flex-col">
-              <label>Title</label>
-              <p className="mt-1 text-xl font-semibold">
+              <label className="font-semibold">Title</label>
+              <p className="mt-1 text-xl">
                 {title} at {location}
               </p>
             </div>
           </div>
           <div className="flex w-full flex-row pb-4">
             <div className="flex w-full flex-col">
-              <label>Highlights</label>
+              <label className="font-semibold">Highlights</label>
               {Highlights.map((h, i) => {
                 return (
-                  <p className="mt-1 text-xl font-semibold" key={i}>
+                  <p className="mt-1 text-xl" key={i}>
                     {h.highlight}
                   </p>
                 );
               })}
-              {!Highlights.length ? (
-                <p className="mt-1 text-xl font-semibold">--</p>
-              ) : null}
+              {!Highlights.length ? <p className="mt-1 text-xl">--</p> : null}
             </div>
           </div>
         </div>
