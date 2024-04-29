@@ -1,19 +1,20 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import { api } from "~/utils/api";
 import { useContacts } from "~/store/AppStore";
 import toast from "react-hot-toast";
-import type { Contact, ContactObj, Interaction } from "contact";
+import type { Contact, ContactObj } from "contact";
 import { ContactLoadingPage } from "~/components/loading";
 
-import { ProfileTab } from "~/components/contact/ProfileTab";
-import { InteractionsTab } from "~/components/contact/InteractionsTab";
-import { HistoryTab } from "~/components/contact/HistoryTab";
-import { OpportunitiesTab } from "~/components/contact/OpportunitiesTab";
+import { ProfileTab } from "~/components/contact/tabs/ProfileTab";
+import { InteractionsTab } from "~/components/contact/tabs/InteractionsTab";
+import { HistoryTab } from "~/components/contact/tabs/HistoryTab";
+import { OpportunitiesTab } from "~/components/contact/tabs/OpportunitiesTab";
 
 const ProfileSection = (props: { contactId: number; contact: Contact }) => {
-  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(1);
+  const [activeTab, setActiveTab] = useState<0 | 1 | 2 | 3>(0);
+  const router = useRouter();
   const ProfileSectionTab = (props: {
     title: string;
     index: 0 | 1 | 2 | 3;
@@ -30,7 +31,7 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   };
 
   const { contactId, contact } = props;
-  const { data, isLoading, error } = api.contacts.getInteractions.useQuery({
+  const { data, isLoading, error } = api.interactions.getByContact.useQuery({
     contactId,
   });
 
@@ -39,7 +40,27 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
   const { intTitle, intDate, intHighlights, ...rest } = contact;
   const contactObj: ContactObj = { ...rest, interactions: data ?? [] };
 
-  if (isLoading || !data) {
+  const ctx = api.useUtils();
+
+  const { mutate, isPending } = api.contacts.delete.useMutation({
+    onSuccess: async () => {
+      toast.success(`Successfully deleted contact!`);
+      void ctx.contacts.getAll.invalidate();
+      await router.push("/");
+    },
+    onError: (err) => {
+      toast.error("Failed to delete contact, please try again later!");
+    },
+  });
+
+  const handleDeleteContact = () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this contact? This action cannot be undone.",
+    );
+    if (confirm) mutate({ id: contactId });
+  };
+
+  if (isLoading || !data || isPending) {
     return <ContactLoadingPage />;
   }
 
@@ -50,14 +71,20 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
           <p className="text-3xl text-site-purple-r">Contact</p>
         </div>
       </div>
-      <div className="flex h-full w-full flex-row rounded-lg bg-white p-4">
+      <div className="flex h-full w-full flex-row overflow-hidden rounded-lg bg-white p-4">
         <div className="flex w-48 flex-col border-r-2">
           <ProfileSectionTab title="Profile" index={0} />
           <ProfileSectionTab title="Interactions" index={1} />
           <ProfileSectionTab title="History" index={2} />
           <ProfileSectionTab title="Opportunities" index={3} />
+          <p
+            className="text-md mt-10 w-fit rounded-full px-4 py-2 text-red-500 transition delay-100 ease-in-out hover:bg-red-500 hover:text-white"
+            onClick={handleDeleteContact}
+          >
+            Delete Contact
+          </p>
         </div>
-        <div className="w-full pl-6">
+        <div className="w-full overflow-y-auto px-6">
           {activeTab === 0 ? <ProfileTab contactObj={contactObj} /> : null}
           {activeTab === 1 ? <InteractionsTab contactObj={contactObj} /> : null}
           {activeTab === 2 ? <HistoryTab /> : null}

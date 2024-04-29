@@ -25,7 +25,7 @@ const TextField = (props: { label: string; text: string }) => {
 export const ProfileTab = (props: { contactObj: ContactObj }) => {
   const { contactObj } = props;
   return (
-    <>
+    <div className="overflow-hidden overflow-y-auto pb-6">
       <p className="pb-2 text-lg font-semibold">Profile</p>
       <div className="flex h-32 flex-row items-center justify-between rounded-xl border-2 px-5">
         <div className="flex">
@@ -78,6 +78,6 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
           <EditButton />
         </div>
       </div>
-    </>
+    </div>
   );
 };
