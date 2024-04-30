@@ -2,13 +2,11 @@ import Head from "next/head";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   type IconDefinition,
-  faHouse,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faMagnifyingGlass,
   faCaretDown,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -98,21 +96,14 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
           <div className="flex w-full flex-col">
             <div className="flex h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
-              <div className="flex w-1/6 items-center">
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{ height: "20px", width: "20px" }}
-                />
-                <p className="ml-3 text-sm text-[#b5bfc3]">
-                  Type in to Search...
+              <div className="flex w-1/6 items-center"></div>
+              <div
+                className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
+                onClick={() => router.push("/")}
+              >
+                <p className="bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-3xl font-semibold text-transparent">
+                  NETWORK BUDDY
                 </p>
-              </div>
-              <div className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r">
-                <FontAwesomeIcon
-                  icon={faHouse}
-                  style={{ height: "20px", width: "20px" }}
-                  onClick={() => router.push("/")}
-                />
               </div>
               <div className="flex w-1/6 items-center justify-end">
                 <div className="h-8 w-8 rounded-full border-2 border-[#4ca8f6]"></div>
