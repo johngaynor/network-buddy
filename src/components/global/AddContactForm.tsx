@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 import { Modal } from "./Modal";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "../loading";
 
 interface NewContactFormData {
   name: string;
@@ -69,7 +70,8 @@ export const AddContactForm = (props: {
   };
 
   const Form = (
-    <>
+    <div className="relative">
+      {isPending && !isModal ? <LoadingSpinner size={20} /> : null}
       <div className="flex flex-col p-6">
         {/* first row of inputs */}
         <div
@@ -188,7 +190,7 @@ export const AddContactForm = (props: {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 
   if (isModal && setAddModal) {

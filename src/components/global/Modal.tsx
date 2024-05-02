@@ -8,7 +8,7 @@ export const Modal = ({
 }: {
   children: ReactNode;
   header: string;
-  loadingState: boolean;
+  loadingState?: boolean;
 }) => {
   return (
     <>

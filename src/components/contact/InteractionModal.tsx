@@ -19,7 +19,7 @@ export interface InteractionFormData {
 export const Modal = (props: { children: ReactNode; title: string }) => {
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+      <div className="z-41 fixed inset-0 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <div className="relative mx-auto my-6 w-1/2">
           <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
             <div className="flex items-center justify-center rounded-t p-5">
