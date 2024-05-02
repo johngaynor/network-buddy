@@ -94,9 +94,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
-        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-5 font-sans ${inter.variable}`}
+        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r font-sans md:p-5 ${inter.variable}`}
       >
-        <div className="flex h-full w-full flex-row rounded-lg bg-white">
+        <div className="flex h-full w-full flex-row bg-white md:rounded-lg">
           {/* start desktop nav */}
           <div
             className={` hidden flex-col transition-all delay-100 ease-in-out lg:flex ${navOpen ? "w-56" : "w-14"}`}
@@ -118,7 +118,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
                 onClick={() => router.push("/")}
               >
-                <p className="bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-3xl font-semibold text-transparent">
+                <p className="xs:text-3xl bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-xl font-semibold text-transparent">
                   NETWORK BUDDY
                 </p>
               </div>
@@ -148,7 +148,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               />
               <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
             </div>
-            <div className="flex h-full flex-col overflow-hidden rounded-br-lg bg-gray-100 p-6">
+            <div className="flex h-full flex-col overflow-scroll rounded-br-lg bg-gray-100 md:overflow-hidden md:p-6">
               {children}
             </div>
           </div>

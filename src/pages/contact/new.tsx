@@ -6,7 +6,7 @@ const NewContactPage: NextPage = () => {
     <>
       <div className="flex h-16 justify-between">
         <div className="flex items-center">
-          <p className="text-3xl text-site-purple-r">New Contact Form</p>
+          <p className="p-6 text-3xl text-site-purple-r">New Contact Form</p>
         </div>
       </div>
       <AddContactForm isModal={false} />
