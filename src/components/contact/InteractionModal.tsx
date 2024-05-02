@@ -101,7 +101,11 @@ export const EditInteractionModal = (props: {
       if (!props.interaction.id) {
         newMutate({ ...formData, contactId: props.contactId });
       } else {
-        editMutate({ ...formData, interactionId: props.interaction.id });
+        editMutate({
+          ...formData,
+          interactionId: props.interaction.id,
+          contactId: props.contactId,
+        });
       }
       setFormData({
         date: new Date(),
@@ -298,6 +302,7 @@ export const ViewInteractionModal = (props: {
   interaction: Interaction | InteractionFormData | null;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   setInteraction: Dispatch<SetStateAction<Interaction | null>>;
+  contactId: number;
 }) => {
   if (!props.interaction) return;
   const {
@@ -330,7 +335,7 @@ export const ViewInteractionModal = (props: {
       "Are you sure you want to delete this interaction? This action cannot be undone.",
     );
 
-    if (confirm) mutate({ interactionId: id });
+    if (confirm) mutate({ interactionId: id, contactId: props.contactId });
   };
 
   return (
@@ -427,6 +432,7 @@ export const InteractionModal = (props: {
         interaction={interaction}
         setInteraction={setInteraction}
         setEditMode={setEditMode}
+        contactId={contactId}
       />
     );
 };

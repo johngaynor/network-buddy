@@ -70,19 +70,25 @@ const columns = [
 const ContactTable = (props: { contacts: Contact[] }) => {
   const [contactModal, setContactModal] = useState<null | number>(null);
   const { contacts } = props;
+
+  const sortedContacts = contacts.sort((a, b) => {
+    const dateA = DateTime.fromJSDate(a.lastUpdated);
+    const dateB = DateTime.fromJSDate(b.lastUpdated);
+    return dateB.toMillis() - dateA.toMillis();
+  });
   const table = useReactTable({
-    data: contacts ?? [],
+    data: sortedContacts ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    initialState: {
-      sorting: [
-        {
-          id: "activity_date",
-          desc: true,
-        },
-      ],
-    },
+    // initialState: {
+    //   sorting: [
+    //     {
+    //       id: "activity_date",
+    //       desc: true,
+    //     },
+    //   ],
+    // },
   });
 
   if (!table) return "Error, no data to display";
