@@ -4,6 +4,7 @@ import {
   type IconDefinition,
   faUserPlus,
   faPowerOff,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -96,8 +97,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-5 font-sans ${inter.variable}`}
       >
         <div className="flex h-full w-full flex-row rounded-lg bg-white">
+          {/* start desktop nav */}
           <div
-            className={`flex flex-col transition-all delay-100 ease-in-out ${navOpen ? "w-56" : "w-14"}`}
+            className={` hidden flex-col transition-all delay-100 ease-in-out lg:flex ${navOpen ? "w-56" : "w-14"}`}
           >
             <NavIcon icon={faBars} openOnClick={true} title="Settings" />
             <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
@@ -108,8 +110,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             />
             <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
           </div>
+          {/* end desktop nav */}
           <div className="flex w-full flex-col">
-            <div className="flex h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
+            <div className="flex min-h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
               <div className="flex w-1/6 items-center"></div>
               <div
                 className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
@@ -125,8 +128,25 @@ export default function Layout({ children }: { children: ReactNode }) {
                   icon={faCaretDown}
                   style={{ height: "20px", width: "20px", marginLeft: "10px" }}
                 /> */}
-                <p>{username}</p>
+                <p className="hidden lg:block">{username}</p>
+                <div className="lg:hidden" onClick={() => setNavOpen(!navOpen)}>
+                  <FontAwesomeIcon
+                    icon={navOpen ? faXmark : faBars}
+                    style={{ height: "20px", width: "20px" }}
+                  />
+                </div>
               </div>
+            </div>
+            <div
+              className={`${navOpen ? "flex lg:hidden" : "hidden"} flex-col items-center justify-center transition-all delay-100 ease-in-out`}
+            >
+              <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
+              <NavIcon
+                icon={faUserPlus}
+                title="Add Contact"
+                link="/contact/new"
+              />
+              <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
             </div>
             <div className="flex h-full flex-col overflow-hidden rounded-br-lg bg-gray-100 p-6">
               {children}

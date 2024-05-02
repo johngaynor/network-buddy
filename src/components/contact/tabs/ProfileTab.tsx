@@ -40,7 +40,7 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
             </p>
           </div>
         </div>
-        <EditButton />
+        {/* <EditButton /> */}
       </div>
       <div className="my-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
         <div className="w-4/5">
@@ -60,7 +60,7 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
           </div>
           <TextField label="General Notes" text={contactObj.notes ?? "--"} />
         </div>
-        <EditButton />
+        {/* <EditButton /> */}
       </div>
       <div className="flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
         <div className="w-4/5">
@@ -74,9 +74,7 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
             </div>
           </div>
         </div>
-        <div className="mb-3 flex items-center">
-          <EditButton />
-        </div>
+        <div className="mb-3 flex items-center">{/* <EditButton /> */}</div>
       </div>
     </div>
   );
