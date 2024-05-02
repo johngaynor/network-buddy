@@ -26,7 +26,6 @@ const columnHelper = createColumnHelper<Contact>();
 const columns = [
   columnHelper.accessor("name", {
     header: () => "NAME",
-    id: "name",
     cell: (info) => info.getValue(),
     size: 150,
   }),
@@ -79,7 +78,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
     initialState: {
       sorting: [
         {
-          id: "name",
+          id: "activity_date",
           desc: true,
         },
       ],
@@ -146,33 +145,32 @@ const HomePage: NextPage = () => {
   const contacts = useContacts();
   const contactsLoading = useContactsLoading();
 
+  console.log(contacts);
+
   return (
     <>
       {addModal ? (
         <AddContactForm setAddModal={setAddModal} isModal={true} />
       ) : null}
       <div className="flex h-16 justify-between">
-        <div className="flex w-1/3 items-center justify-between">
-          <p className="text-3xl text-site-purple-r">Contacts</p>
-          <p className="-ml-20 text-sm text-[#b5bfc3]">14,323 Total</p>
-          <p className="text-sm text-[#b5bfc3]">
-            Sort by: <span className="text-[#828586]">Date Created</span>
-          </p>
+        <div className="flex items-center justify-between">
+          <p className=" pr-4 text-3xl text-site-purple-r">Contacts</p>
+          <p className="pt-2 text-sm text-[#b5bfc3]">{contacts.length} Total</p>
         </div>
         <div className="flex w-1/3 items-center justify-end">
-          <div className="hover:text-text-[#4ca8f6] flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-white text-[#8099a7] transition ease-in-out hover:bg-site-blue-l hover:text-[#4ca8f6]">
+          {/* <div className="hover:text-text-[#4ca8f6] flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-white text-[#8099a7] transition ease-in-out hover:bg-site-blue-l hover:text-[#4ca8f6]">
             <FontAwesomeIcon
               icon={faBars}
               style={{ height: "20px", width: "20px" }}
             />
-          </div>
-          <div className="mx-1 flex h-10 w-20 cursor-pointer items-center justify-evenly rounded-md bg-white text-sm text-[#8099a7] transition ease-in-out hover:bg-[#ddf1fb] hover:text-[#4ca8f6]">
+          </div> */}
+          {/* <div className="mx-1 flex h-10 w-20 cursor-pointer items-center justify-evenly rounded-md bg-white text-sm text-[#8099a7] transition ease-in-out hover:bg-[#ddf1fb] hover:text-[#4ca8f6]">
             <p>Filter</p>
             <FontAwesomeIcon
               icon={faFilter}
               style={{ height: "20px", width: "20px" }}
             />
-          </div>
+          </div> */}
           <div
             className="flex h-10 w-36 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white"
             onClick={() => setAddModal(!addModal)}
@@ -183,12 +181,12 @@ const HomePage: NextPage = () => {
             />
             <p>Add Contact</p>
           </div>
-          <div className="mx-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-site-blue-l text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
+          {/* <div className="mx-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-site-blue-l text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white">
             <FontAwesomeIcon
               icon={faEllipsis}
               style={{ height: "20px", width: "20px" }}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       {!contacts || contactsLoading ? (

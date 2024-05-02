@@ -9,12 +9,12 @@ import "~/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <Layout>
-      <ClerkProvider {...pageProps}>
+    <ClerkProvider {...pageProps}>
+      <Layout>
         <Toaster />
         <Component {...pageProps} />
-      </ClerkProvider>
-    </Layout>
+      </Layout>
+    </ClerkProvider>
   );
 };
 

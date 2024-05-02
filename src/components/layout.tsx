@@ -3,6 +3,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import {
   type IconDefinition,
   faUserPlus,
+  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,6 +16,8 @@ import { api } from "~/utils/api";
 import { useSetContacts, useSetContactsLoading } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { SignOutButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,34 +45,44 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (contactsError)
     toast.error("Error retrieving contacts, please try again later!");
 
+  const session = useUser();
+  const username = session.user?.fullName;
+
   const NavIcon = (props: {
     icon: IconDefinition;
     openOnClick?: boolean;
     title: string;
     link?: string;
+    isLogout?: boolean;
   }) => {
-    return (
-      <div
-        className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out hover:bg-site-purple-l hover:text-site-purple-r
+    const button = () => {
+      return (
+        <div
+          className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out ${props.isLogout ? "hover:bg-red-200 hover:text-red-500" : "hover:bg-site-purple-l hover:text-site-purple-r"}
         ${navOpen ? "w-56" : "w-14"} ${props.openOnClick ? "rounded-tl-xl" : ""}
         `}
-        onClick={() =>
-          props.openOnClick
-            ? setNavOpen(!navOpen)
-            : props.link
-              ? router.push(props.link)
-              : null
-        }
-      >
-        <div className="absolute flex h-14 w-14 items-center justify-center">
-          <FontAwesomeIcon
-            icon={props.icon}
-            style={{ height: "20px", width: "20px" }}
-          />
+          onClick={() =>
+            props.openOnClick
+              ? setNavOpen(!navOpen)
+              : props.link
+                ? router.push(props.link)
+                : null
+          }
+        >
+          <div className="absolute flex h-14 w-14 items-center justify-center">
+            <FontAwesomeIcon
+              icon={props.icon}
+              style={{ height: "20px", width: "20px" }}
+            />
+          </div>
+          {navOpen && <p className="pl-14">{props.title}</p>}
         </div>
-        {navOpen && <p className="pl-14">{props.title}</p>}
-      </div>
-    );
+      );
+    };
+
+    if (!props.isLogout) {
+      return button();
+    } else return <SignOutButton>{button()}</SignOutButton>;
   };
 
   return (
@@ -93,6 +106,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               title="Add Contact"
               link="/contact/new"
             />
+            <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
           </div>
           <div className="flex w-full flex-col">
             <div className="flex h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
@@ -106,11 +120,12 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </p>
               </div>
               <div className="flex w-1/6 items-center justify-end">
-                <div className="h-8 w-8 rounded-full border-2 border-[#4ca8f6]"></div>
+                {/* <div className="h-8 w-8 rounded-full border-2 border-[#4ca8f6]"></div>
                 <FontAwesomeIcon
                   icon={faCaretDown}
                   style={{ height: "20px", width: "20px", marginLeft: "10px" }}
-                />
+                /> */}
+                <p>{username}</p>
               </div>
             </div>
             <div className="flex h-full flex-col overflow-hidden rounded-br-lg bg-gray-100 p-6">
