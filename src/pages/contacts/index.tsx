@@ -20,28 +20,56 @@ import {
   faUserPlus,
   faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
+import { useWindowDimensions } from "~/components/hooks/useWindowDimensions";
+import { useRouter } from "next/navigation";
 
 // table scaffolding
 const columnHelper = createColumnHelper<Contact>();
-const columns = [
+const bigColumns = [
   columnHelper.accessor("name", {
+    id: "name",
     header: () => "NAME",
     cell: (info) => info.getValue(),
     size: 150,
   }),
   columnHelper.accessor("affiliation", {
+    id: "affiliation",
     header: () => "AFFILIATION",
-    cell: (info) => info.renderValue(),
+    cell: (info) => {
+      const value = info.renderValue();
+      if (value) {
+        return value.substring(0, 10) + (value.length > 10 ? "..." : "");
+      } else {
+        return "";
+      }
+    },
   }),
   columnHelper.accessor("position", {
+    id: "position",
     header: () => "POSITION",
-    cell: (info) => info.renderValue(),
+    cell: (info) => {
+      const value = info.renderValue();
+      if (value) {
+        return value.substring(0, 20) + (value.length > 20 ? "..." : "");
+      } else {
+        return "";
+      }
+    },
   }),
   columnHelper.accessor("company", {
+    id: "company",
     header: () => "COMPANY",
-    cell: (info) => info.renderValue(),
+    cell: (info) => {
+      const value = info.renderValue();
+      if (value) {
+        return value.substring(0, 20) + (value.length > 20 ? "..." : "");
+      } else {
+        return "";
+      }
+    },
   }),
   columnHelper.accessor("intTitle", {
+    id: "int_title",
     header: () => "RECENT ACTIVITY",
     cell: (info) => {
       const title = info.getValue();
@@ -53,7 +81,7 @@ const columns = [
   }),
   columnHelper.accessor("intDate", {
     header: () => "ACTIVITY DATE",
-    id: "activity_date",
+    id: "int_date",
     cell: (info) => {
       const date = info.getValue();
       if (!date) {
@@ -66,10 +94,23 @@ const columns = [
     size: 90,
   }),
 ];
+const smallColumns = [
+  columnHelper.accessor("name", {
+    id: "name",
+    header: () => "NAME",
+    cell: (info) => info.getValue(),
+    size: 150,
+  }),
+];
 
 const ContactTable = (props: { contacts: Contact[] }) => {
   const [contactModal, setContactModal] = useState<null | number>(null);
   const { contacts } = props;
+  const router = useRouter();
+
+  const { width } = useWindowDimensions();
+
+  const useMobile = width > 1200 ? false : true;
 
   const sortedContacts = contacts.sort((a, b) => {
     const dateA = DateTime.fromJSDate(a.lastUpdated);
@@ -78,20 +119,21 @@ const ContactTable = (props: { contacts: Contact[] }) => {
   });
   const table = useReactTable({
     data: sortedContacts ?? [],
-    columns,
+    columns: useMobile ? smallColumns : bigColumns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    // initialState: {
-    //   sorting: [
-    //     {
-    //       id: "activity_date",
-    //       desc: true,
-    //     },
-    //   ],
-    // },
   });
 
   if (!table) return "Error, no data to display";
+
+  const handleClickRow = (id: number) => {
+    if (useMobile) {
+      router.push(`/contact/${id}`);
+      // go to the contact page for this ID
+    } else {
+      setContactModal(id);
+    }
+  };
 
   return (
     <>
@@ -102,7 +144,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
           contacts={contacts}
         />
       ) : null}
-      <table className="mt-5">
+      <table className="mt-5 w-full p-6 md:p-0">
         <thead>
           {table.getHeaderGroups().map((headerGroup, i) => (
             <tr key={headerGroup.id + i}>
@@ -127,7 +169,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
             <tr
               key={row.id + i}
               className="h-12 cursor-pointer rounded-xl border-y-8 border-gray-100 bg-white text-[#999] hover:bg-gray-200"
-              onClick={() => setContactModal(row.original.id)}
+              onClick={() => handleClickRow(row.original.id)}
             >
               {row.getVisibleCells().map((cell, i) => (
                 <td
@@ -150,8 +192,17 @@ const HomePage: NextPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
   const contacts = useContacts();
   const contactsLoading = useContactsLoading();
+  const router = useRouter();
 
-  console.log(contacts);
+  const { width } = useWindowDimensions();
+
+  const useMobile = width > 1200 ? false : true;
+
+  const handleAddContact = () => {
+    if (useMobile) {
+      router.push("/contact/new");
+    } else setAddModal(!addModal);
+  };
 
   return (
     <>
@@ -160,7 +211,9 @@ const HomePage: NextPage = () => {
       ) : null}
       <div className="flex h-16 justify-between">
         <div className="flex items-center justify-between">
-          <p className=" pr-4 text-3xl text-site-purple-r">Contacts</p>
+          <p className=" xs:text-3xl p-6 pr-4 text-2xl text-site-purple-r md:pl-0">
+            Contacts
+          </p>
           <p className="pt-2 text-sm text-[#b5bfc3]">{contacts.length} Total</p>
         </div>
         <div className="flex w-1/3 items-center justify-end">
@@ -178,8 +231,8 @@ const HomePage: NextPage = () => {
             />
           </div> */}
           <div
-            className="flex h-10 w-36 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white"
-            onClick={() => setAddModal(!addModal)}
+            className="mr-3 flex h-10 w-36 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-r text-sm text-white sm:m-0"
+            onClick={handleAddContact}
           >
             <FontAwesomeIcon
               icon={faUserPlus}
