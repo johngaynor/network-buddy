@@ -70,7 +70,6 @@ export const AddContactForm = (props: {
 
   const Form = (
     <>
-      {/* {isModal && <Modal header="Add Contact" loadingState={isPending}>} */}
       <div className="flex flex-col p-6">
         {/* first row of inputs */}
         <div

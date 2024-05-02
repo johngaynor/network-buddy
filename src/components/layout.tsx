@@ -57,18 +57,20 @@ export default function Layout({ children }: { children: ReactNode }) {
     isLogout?: boolean;
   }) => {
     const button = () => {
+      const handleButtonClick = () => {
+        if (props.openOnClick) {
+          setNavOpen(!navOpen);
+        } else if (props.link) {
+          router.push(props.link);
+          setNavOpen(false);
+        }
+      };
       return (
         <div
           className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out ${props.isLogout ? "hover:bg-red-200 hover:text-red-500" : "hover:bg-site-purple-l hover:text-site-purple-r"}
         ${navOpen ? "w-56" : "w-14"} ${props.openOnClick ? "rounded-tl-xl" : ""}
         `}
-          onClick={() =>
-            props.openOnClick
-              ? setNavOpen(!navOpen)
-              : props.link
-                ? router.push(props.link)
-                : null
-          }
+          onClick={handleButtonClick}
         >
           <div className="absolute flex h-14 w-14 items-center justify-center">
             <FontAwesomeIcon
@@ -94,9 +96,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
-        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r font-sans md:p-5 ${inter.variable}`}
+        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r font-sans lg:p-5 ${inter.variable}`}
       >
-        <div className="flex h-full w-full flex-row bg-white md:rounded-lg">
+        <div className="flex h-full w-full flex-row bg-white lg:rounded-lg">
           {/* start desktop nav */}
           <div
             className={` hidden flex-col transition-all delay-100 ease-in-out lg:flex ${navOpen ? "w-56" : "w-14"}`}
@@ -111,8 +113,8 @@ export default function Layout({ children }: { children: ReactNode }) {
             <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
           </div>
           {/* end desktop nav */}
-          <div className="flex w-full flex-col">
-            <div className="flex min-h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
+          <div className="relative flex w-full flex-col">
+            <div className="z-50 flex min-h-14 w-full items-center bg-white px-6 text-[#8099a7] lg:rounded-lg">
               <div className="flex w-1/6 items-center"></div>
               <div
                 className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
@@ -123,11 +125,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </p>
               </div>
               <div className="flex w-1/6 items-center justify-end">
-                {/* <div className="h-8 w-8 rounded-full border-2 border-[#4ca8f6]"></div>
-                <FontAwesomeIcon
-                  icon={faCaretDown}
-                  style={{ height: "20px", width: "20px", marginLeft: "10px" }}
-                /> */}
                 <p className="hidden lg:block">{username}</p>
                 <div className="lg:hidden" onClick={() => setNavOpen(!navOpen)}>
                   <FontAwesomeIcon
@@ -138,7 +135,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </div>
             </div>
             <div
-              className={`${navOpen ? "flex lg:hidden" : "hidden"} flex-col items-center justify-center transition-all delay-100 ease-in-out`}
+              className={`${navOpen ? "flex lg:hidden" : "hidden"} absolute z-50 mt-14 w-full flex-col items-center justify-center bg-white transition-all delay-100 ease-in-out`}
             >
               <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
               <NavIcon
@@ -148,7 +145,11 @@ export default function Layout({ children }: { children: ReactNode }) {
               />
               <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
             </div>
-            <div className="flex h-full flex-col overflow-scroll rounded-br-lg bg-gray-100 md:overflow-hidden md:p-6">
+            <div className="flex h-full flex-col overflow-scroll rounded-br-lg bg-gray-100 md:p-6 lg:overflow-hidden">
+              {navOpen ? (
+                <div className="fixed inset-0 z-40 bg-black opacity-50 lg:hidden"></div>
+              ) : null}
+
               {children}
             </div>
           </div>
