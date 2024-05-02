@@ -231,7 +231,7 @@ export const EditInteractionModal = (props: {
               return null;
             })}
             {/* There is a bug here... after entering the first letter, it loses focus because it is removing one input and switching in another */}
-            {!formData.Highlights.length ? (
+            {/* {!formData.Highlights.length ? (
               <div className="flex">
                 <input
                   className="mt-2 w-full rounded-lg border-2 p-2"
@@ -256,9 +256,9 @@ export const EditInteractionModal = (props: {
                   />
                 </div>
               </div>
-            ) : null}
+            ) : null} */}
             <div
-              className="mt-2 flex h-8 w-8 items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
+              className="mt-2 flex h-8 w-8 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
               onClick={() =>
                 setFormData({
                   ...formData,
@@ -367,16 +367,14 @@ export const ViewInteractionModal = (props: {
         </div>
       </div>
       <div className="flex items-center justify-between rounded-b p-6">
-        <div>
-          <div
-            className="mb-1 mr-1 flex rounded bg-red-500 px-3 py-3 text-sm uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-            onClick={handleDelete}
-          >
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              style={{ height: "18px", width: "18px" }}
-            />
-          </div>
+        <div
+          className="mb-1 mr-1 flex cursor-pointer rounded bg-red-500 px-3 py-3 text-sm uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+          onClick={handleDelete}
+        >
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            style={{ height: "18px", width: "18px" }}
+          />
         </div>
         <div>
           <button

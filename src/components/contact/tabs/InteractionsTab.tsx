@@ -119,5 +119,3 @@ export const InteractionsTab = (props: { contactObj: ContactObj }) => {
     </div>
   );
 };
-
-// need to add cursor pointers to everything
