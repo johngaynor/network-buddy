@@ -2,13 +2,13 @@ import Head from "next/head";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   type IconDefinition,
-  faHouse,
   faUserPlus,
+  faPowerOff,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faMagnifyingGlass,
   faCaretDown,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +17,8 @@ import { api } from "~/utils/api";
 import { useSetContacts, useSetContactsLoading } from "~/store/AppStore";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { SignOutButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,34 +46,46 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (contactsError)
     toast.error("Error retrieving contacts, please try again later!");
 
+  const session = useUser();
+  const username = session.user?.fullName;
+
   const NavIcon = (props: {
     icon: IconDefinition;
     openOnClick?: boolean;
     title: string;
     link?: string;
+    isLogout?: boolean;
   }) => {
-    return (
-      <div
-        className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out hover:bg-site-purple-l hover:text-site-purple-r
+    const button = () => {
+      const handleButtonClick = () => {
+        if (props.openOnClick) {
+          setNavOpen(!navOpen);
+        } else if (props.link) {
+          router.push(props.link);
+          setNavOpen(false);
+        }
+      };
+      return (
+        <div
+          className={`flex h-14 items-center overflow-x-hidden text-[#8099a7] transition ease-in-out ${props.isLogout ? "hover:bg-red-200 hover:text-red-500" : "hover:bg-site-purple-l hover:text-site-purple-r"}
         ${navOpen ? "w-56" : "w-14"} ${props.openOnClick ? "rounded-tl-xl" : ""}
         `}
-        onClick={() =>
-          props.openOnClick
-            ? setNavOpen(!navOpen)
-            : props.link
-              ? router.push(props.link)
-              : null
-        }
-      >
-        <div className="absolute flex h-14 w-14 items-center justify-center">
-          <FontAwesomeIcon
-            icon={props.icon}
-            style={{ height: "20px", width: "20px" }}
-          />
+          onClick={handleButtonClick}
+        >
+          <div className="absolute flex h-14 w-14 items-center justify-center">
+            <FontAwesomeIcon
+              icon={props.icon}
+              style={{ height: "20px", width: "20px" }}
+            />
+          </div>
+          {navOpen && <p className="pl-14">{props.title}</p>}
         </div>
-        {navOpen && <p className="pl-14">{props.title}</p>}
-      </div>
-    );
+      );
+    };
+
+    if (!props.isLogout) {
+      return button();
+    } else return <SignOutButton>{button()}</SignOutButton>;
   };
 
   return (
@@ -82,11 +96,12 @@ export default function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
-        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r p-5 font-sans ${inter.variable}`}
+        className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r font-sans lg:p-5 ${inter.variable}`}
       >
-        <div className="flex h-full w-full flex-row rounded-lg bg-white">
+        <div className="flex h-full w-full flex-row bg-white lg:rounded-lg">
+          {/* start desktop nav */}
           <div
-            className={`flex flex-col transition-all delay-100 ease-in-out ${navOpen ? "w-56" : "w-14"}`}
+            className={` hidden flex-col transition-all delay-100 ease-in-out lg:flex ${navOpen ? "w-56" : "w-14"}`}
           >
             <NavIcon icon={faBars} openOnClick={true} title="Settings" />
             <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
@@ -95,34 +110,46 @@ export default function Layout({ children }: { children: ReactNode }) {
               title="Add Contact"
               link="/contact/new"
             />
+            <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
           </div>
-          <div className="flex w-full flex-col">
-            <div className="flex h-14 w-full items-center rounded-r-lg px-6 text-[#8099a7]">
-              <div className="flex w-1/6 items-center">
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{ height: "20px", width: "20px" }}
-                />
-                <p className="ml-3 text-sm text-[#b5bfc3]">
-                  Type in to Search...
+          {/* end desktop nav */}
+          <div className="relative flex w-full flex-col">
+            <div className="z-50 flex min-h-14 w-full items-center bg-white px-6 text-[#8099a7] lg:rounded-lg">
+              <div className="flex w-1/6 items-center"></div>
+              <div
+                className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
+                onClick={() => router.push("/")}
+              >
+                <p className="xs:text-3xl bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-xl font-semibold text-transparent">
+                  NETWORK BUDDY
                 </p>
               </div>
-              <div className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r">
-                <FontAwesomeIcon
-                  icon={faHouse}
-                  style={{ height: "20px", width: "20px" }}
-                  onClick={() => router.push("/")}
-                />
-              </div>
               <div className="flex w-1/6 items-center justify-end">
-                <div className="h-8 w-8 rounded-full border-2 border-[#4ca8f6]"></div>
-                <FontAwesomeIcon
-                  icon={faCaretDown}
-                  style={{ height: "20px", width: "20px", marginLeft: "10px" }}
-                />
+                <p className="hidden lg:block">{username}</p>
+                <div className="lg:hidden" onClick={() => setNavOpen(!navOpen)}>
+                  <FontAwesomeIcon
+                    icon={navOpen ? faXmark : faBars}
+                    style={{ height: "20px", width: "20px" }}
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex h-full flex-col overflow-hidden rounded-br-lg bg-gray-100 p-6">
+            <div
+              className={`${navOpen ? "flex lg:hidden" : "hidden"} absolute z-50 mt-14 w-full flex-col items-center justify-center bg-white transition-all delay-100 ease-in-out`}
+            >
+              <NavIcon icon={faUserGroup} title="Contacts" link="/contacts" />
+              <NavIcon
+                icon={faUserPlus}
+                title="Add Contact"
+                link="/contact/new"
+              />
+              <NavIcon icon={faPowerOff} title="Logout" isLogout={true} />
+            </div>
+            <div className="flex h-full flex-col overflow-scroll rounded-br-lg bg-gray-100 md:p-6 lg:overflow-hidden">
+              {navOpen ? (
+                <div className="fixed inset-0 z-40 bg-black opacity-50 lg:hidden"></div>
+              ) : null}
+
               {children}
             </div>
           </div>

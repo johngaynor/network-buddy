@@ -19,7 +19,7 @@ export interface InteractionFormData {
 export const Modal = (props: { children: ReactNode; title: string }) => {
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+      <div className="z-41 fixed inset-0 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <div className="relative mx-auto my-6 w-1/2">
           <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
             <div className="flex items-center justify-center rounded-t p-5">
@@ -101,7 +101,11 @@ export const EditInteractionModal = (props: {
       if (!props.interaction.id) {
         newMutate({ ...formData, contactId: props.contactId });
       } else {
-        editMutate({ ...formData, interactionId: props.interaction.id });
+        editMutate({
+          ...formData,
+          interactionId: props.interaction.id,
+          contactId: props.contactId,
+        });
       }
       setFormData({
         date: new Date(),
@@ -227,7 +231,7 @@ export const EditInteractionModal = (props: {
               return null;
             })}
             {/* There is a bug here... after entering the first letter, it loses focus because it is removing one input and switching in another */}
-            {!formData.Highlights.length ? (
+            {/* {!formData.Highlights.length ? (
               <div className="flex">
                 <input
                   className="mt-2 w-full rounded-lg border-2 p-2"
@@ -252,9 +256,9 @@ export const EditInteractionModal = (props: {
                   />
                 </div>
               </div>
-            ) : null}
+            ) : null} */}
             <div
-              className="mt-2 flex h-8 w-8 items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
+              className="mt-2 flex h-8 w-8 cursor-pointer items-center justify-evenly rounded-md bg-site-blue-l p-2 text-[#8099a7] text-site-blue-r transition ease-in-out hover:bg-site-blue-r hover:text-white"
               onClick={() =>
                 setFormData({
                   ...formData,
@@ -298,6 +302,7 @@ export const ViewInteractionModal = (props: {
   interaction: Interaction | InteractionFormData | null;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   setInteraction: Dispatch<SetStateAction<Interaction | null>>;
+  contactId: number;
 }) => {
   if (!props.interaction) return;
   const {
@@ -330,7 +335,7 @@ export const ViewInteractionModal = (props: {
       "Are you sure you want to delete this interaction? This action cannot be undone.",
     );
 
-    if (confirm) mutate({ interactionId: id });
+    if (confirm) mutate({ interactionId: id, contactId: props.contactId });
   };
 
   return (
@@ -362,16 +367,14 @@ export const ViewInteractionModal = (props: {
         </div>
       </div>
       <div className="flex items-center justify-between rounded-b p-6">
-        <div>
-          <div
-            className="mb-1 mr-1 flex rounded bg-red-500 px-3 py-3 text-sm uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-            onClick={handleDelete}
-          >
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              style={{ height: "18px", width: "18px" }}
-            />
-          </div>
+        <div
+          className="mb-1 mr-1 flex cursor-pointer rounded bg-red-500 px-3 py-3 text-sm uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+          onClick={handleDelete}
+        >
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            style={{ height: "18px", width: "18px" }}
+          />
         </div>
         <div>
           <button
@@ -427,6 +430,7 @@ export const InteractionModal = (props: {
         interaction={interaction}
         setInteraction={setInteraction}
         setEditMode={setEditMode}
+        contactId={contactId}
       />
     );
 };

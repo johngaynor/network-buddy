@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 import { Modal } from "./Modal";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "../loading";
 
 interface NewContactFormData {
   name: string;
@@ -69,14 +70,14 @@ export const AddContactForm = (props: {
   };
 
   const Form = (
-    <>
-      {/* {isModal && <Modal header="Add Contact" loadingState={isPending}>} */}
+    <div className="relative">
+      {isPending && !isModal ? <LoadingSpinner size={20} /> : null}
       <div className="flex flex-col p-6">
         {/* first row of inputs */}
         <div
-          className={`flex w-full flex-row ${formErrors.name ?? formErrors.affiliation ? "pb-2" : "pb-7"}`}
+          className={`flex w-full flex-col sm:flex-row ${formErrors.name ?? formErrors.affiliation ? "pb-2" : "pb-7"}`}
         >
-          <div className="flex w-1/2 flex-col pr-3">
+          <div className="flex flex-col sm:w-1/2 sm:pr-3">
             <label>Name</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
@@ -92,7 +93,7 @@ export const AddContactForm = (props: {
               <p className="text-red-500">{formErrors.name}</p>
             ) : null}
           </div>
-          <div className="flex w-1/2 flex-col pl-3">
+          <div className="flex flex-col pt-8 sm:w-1/2 sm:pl-3 sm:pt-0">
             <label>Affiliation</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
@@ -111,9 +112,9 @@ export const AddContactForm = (props: {
         </div>
         {/* second row of inputs */}
         <div
-          className={`flex w-full flex-row ${formErrors.position ?? formErrors.company ? "pb-2" : "pb-7"}`}
+          className={`flex w-full flex-col sm:flex-row ${formErrors.position ?? formErrors.company ? "pb-2" : "pb-7"}`}
         >
-          <div className="flex w-1/2 flex-col pr-3">
+          <div className="flex flex-col sm:w-1/2 sm:pr-3">
             <label>Company</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
@@ -129,7 +130,7 @@ export const AddContactForm = (props: {
               <p className="text-red-500">{formErrors.company}</p>
             ) : null}
           </div>
-          <div className="flex w-1/2 flex-col pl-3">
+          <div className="flex flex-col pt-8 sm:w-1/2 sm:pl-3 sm:pt-0">
             <label>Position</label>
             <input
               className="mt-1 rounded-lg border-2 p-2"
@@ -189,7 +190,7 @@ export const AddContactForm = (props: {
           Submit
         </button>
       </div>
-    </>
+    </div>
   );
 
   if (isModal && setAddModal) {

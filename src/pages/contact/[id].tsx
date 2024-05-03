@@ -68,11 +68,23 @@ const ProfileSection = (props: { contactId: number; contact: Contact }) => {
     <>
       <div className="flex h-16 justify-between">
         <div className="flex w-1/3 items-center justify-between">
-          <p className="text-3xl text-site-purple-r">Contact</p>
+          <p className="xs:text-3xl p-6 text-2xl text-site-purple-r">Contact</p>
         </div>
       </div>
+      {/* temporary fix to allow you to switch tabs */}
+      <select
+        onChange={(e) =>
+          setActiveTab(parseInt(e.target.value) as 0 | 1 | 2 | 3)
+        }
+        className="mx-auto h-14 w-1/2 border-2 border-site-purple-r lg:hidden"
+      >
+        <option value="0">Profile</option>
+        <option value="1">Interactions</option>
+        {/* <option value="2">History</option>
+        <option value="3">Opportunities</option> */}
+      </select>
       <div className="flex h-full w-full flex-row overflow-hidden rounded-lg bg-white p-4">
-        <div className="flex w-48 flex-col border-r-2">
+        <div className="hidden w-48 flex-col border-r-2 lg:flex">
           <ProfileSectionTab title="Profile" index={0} />
           <ProfileSectionTab title="Interactions" index={1} />
           <ProfileSectionTab title="History" index={2} />

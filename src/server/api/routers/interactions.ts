@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  limiter: Ratelimit.slidingWindow(10, "1 m"),
   analytics: true,
 });
 
@@ -74,11 +74,17 @@ export const interactionsRouter = createTRPCRouter({
         },
       });
 
+      const updateContact = await ctx.db.contact.update({
+        where: { id: contactId },
+        data: { lastUpdated: new Date() },
+      });
+
       return interaction;
     }),
   edit: privateProcedure
     .input(
       z.object({
+        contactId: z.number(),
         interactionId: z.number(),
         title: z.string().min(1),
         location: z.string().min(1),
@@ -99,7 +105,8 @@ export const interactionsRouter = createTRPCRouter({
 
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
-      const { interactionId, title, location, date, Highlights } = input;
+      const { contactId, interactionId, title, location, date, Highlights } =
+        input;
 
       const deletePromises = Highlights.filter(
         (h) => h.id && (h.highlight === "" || h.isDeleted),
@@ -144,11 +151,17 @@ export const interactionsRouter = createTRPCRouter({
         },
       });
 
+      const updateContact = await ctx.db.contact.update({
+        where: { id: contactId },
+        data: { lastUpdated: new Date() },
+      });
+
       return interaction;
     }),
   delete: privateProcedure
     .input(
       z.object({
+        contactId: z.number(),
         interactionId: z.number(),
       }),
     )
@@ -159,7 +172,7 @@ export const interactionsRouter = createTRPCRouter({
 
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
-      const { interactionId } = input;
+      const { contactId, interactionId } = input;
 
       const highlights = await ctx.db.highlights.deleteMany({
         where: { interactionId },
@@ -168,6 +181,13 @@ export const interactionsRouter = createTRPCRouter({
       const interaction = await ctx.db.interactions.delete({
         where: { id: interactionId },
       });
+
+      const updateContact = await ctx.db.contact.update({
+        where: { id: contactId },
+        data: { lastUpdated: new Date() },
+      });
+
+      return interaction;
     }),
 });
 

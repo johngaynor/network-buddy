@@ -29,7 +29,7 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
       <p className="pb-2 text-lg font-semibold">Profile</p>
       <div className="flex h-32 flex-row items-center justify-between rounded-xl border-2 px-5">
         <div className="flex">
-          <div className="h-20 w-20 rounded-full border-2 border-site-purple-r"></div>
+          <div className="hidden h-20 w-20 rounded-full border-2 border-site-purple-r sm:block"></div>
           <div className="pl-4">
             <p className="pb-1 text-xl">{contactObj.name ?? "--"}</p>
             <p className="text-md text-[#8099a7]">
@@ -40,17 +40,17 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
             </p>
           </div>
         </div>
-        <EditButton />
+        {/* <EditButton /> */}
       </div>
       <div className="my-3 flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
         <div className="w-4/5">
           <p className="py-2 font-semibold">Personal Information</p>
-          <div className="flex">
-            <div className="w-1/2 pr-3 pt-3">
+          <div className="flex flex-col sm:flex-row">
+            <div className="pr-3 pt-3 sm:w-1/2">
               <TextField label="Name" text={contactObj.name ?? "--"} />
               <TextField label="Position" text={contactObj.position ?? "--"} />
             </div>
-            <div className="w-1/2 pr-3 pt-3">
+            <div className="pr-3 sm:w-1/2 sm:pt-3">
               <TextField
                 label="Affiliation"
                 text={contactObj.affiliation ?? "--"}
@@ -60,23 +60,21 @@ export const ProfileTab = (props: { contactObj: ContactObj }) => {
           </div>
           <TextField label="General Notes" text={contactObj.notes ?? "--"} />
         </div>
-        <EditButton />
+        {/* <EditButton /> */}
       </div>
       <div className="flex flex-row justify-between rounded-xl border-2 px-5 pt-3">
         <div className="w-4/5">
           <p className="py-2 font-semibold">Contact Information</p>
-          <div className="flex">
-            <div className="w-1/2 pr-3 pt-3">
+          <div className="flex flex-col sm:flex-row">
+            <div className="pr-3 pt-3 sm:w-1/2">
               <TextField label="Phone #" text="(###) ###-####" />
             </div>
-            <div className="w-1/2 pr-3 pt-3">
+            <div className="pr-3 sm:w-1/2 sm:pt-3">
               <TextField label="Social Media" text="--" />
             </div>
           </div>
         </div>
-        <div className="mb-3 flex items-center">
-          <EditButton />
-        </div>
+        <div className="mb-3 flex items-center">{/* <EditButton /> */}</div>
       </div>
     </div>
   );
