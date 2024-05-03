@@ -114,7 +114,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
           {/* end desktop nav */}
           <div className="relative flex w-full flex-col">
-            <div className="z-50 flex min-h-14 w-full items-center bg-white px-6 text-[#8099a7] lg:rounded-lg">
+            <div className="z-30 flex min-h-14 w-full items-center bg-white px-6 text-[#8099a7] lg:rounded-lg">
               <div className="flex w-1/6 items-center"></div>
               <div
                 className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
@@ -147,7 +147,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </div>
             <div className="flex h-full flex-col overflow-scroll rounded-br-lg bg-gray-100 md:p-6 lg:overflow-hidden">
               {navOpen ? (
-                <div className="fixed inset-0 z-40 bg-black opacity-50 lg:hidden"></div>
+                <div className="fixed inset-0 z-20 bg-black opacity-50 lg:hidden"></div>
               ) : null}
 
               {children}
