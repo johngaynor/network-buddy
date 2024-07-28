@@ -41,7 +41,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       setContacts(contacts);
     }
     setContactsLoading(contactsLoading);
-  }, [contacts, setContacts]);
+  }, [contacts, setContacts, contactsLoading]);
 
   if (contactsError)
     toast.error("Error retrieving contacts, please try again later!");
@@ -120,7 +120,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 className="pointer flex w-2/3 cursor-pointer justify-center hover:text-site-purple-r"
                 onClick={() => router.push("/")}
               >
-                <p className="xs:text-3xl bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-xl font-semibold text-transparent">
+                <p className="bg-gradient-to-bl from-site-blue-r to-site-purple-r bg-clip-text text-xl font-semibold text-transparent xs:text-3xl">
                   NETWORK BUDDY
                 </p>
               </div>
