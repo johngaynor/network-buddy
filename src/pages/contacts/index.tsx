@@ -136,7 +136,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
   };
 
   return (
-    <>
+    <div className="overflow-y-scroll">
       {contactModal ? (
         <ContactModal
           contactModal={contactModal}
@@ -184,7 +184,7 @@ const ContactTable = (props: { contacts: Contact[] }) => {
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 
