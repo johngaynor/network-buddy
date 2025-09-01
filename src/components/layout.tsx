@@ -100,13 +100,15 @@ export default function Layout({ children }: { children: ReactNode }) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-
+        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon-96x96.png" />
         <link
           rel="apple-touch-icon"
           href="/apple-icon-180x180.png"
           sizes="180x180"
         />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </Head>
       <main
         className={`flex h-screen flex-col items-center justify-center bg-gradient-to-bl from-site-blue-r to-site-purple-r font-sans lg:p-5 ${inter.variable}`}
